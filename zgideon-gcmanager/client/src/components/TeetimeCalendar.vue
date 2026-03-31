@@ -1,8 +1,7 @@
 <template>
   <div class="calendar-container">
     <FullCalendar ref="calendar" :options="calendarOptions" />
-      <br>
-      <div v-html="error" class="error"></div>
+      <div v-if="showError" v-html="error" class="error"></div>
   </div>
 </template>
 
@@ -22,6 +21,7 @@ export default {
   data() {
     return {
       error: null,
+      showError: false,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: "timeGridDay",
@@ -34,7 +34,17 @@ export default {
         slotDuration: "00:08:00",
         snapDuration: "00:08:00",
 
+        allDaySlot: false,
+
+        height: '100%',
+
         selectable: true,
+
+        headerToolbar: {
+            left: "prev,next today",
+            center: "title",
+            right: "timeGridDay,timeGridWeek"
+        },
 
         events: [],
 
@@ -71,19 +81,40 @@ export default {
     },
 
     async handleDateClick(info) {
-      let players = parseInt(prompt("Number of players?"), 10)
+      this.error = null
+      const now = new Date()
+      const selectedDate = new Date(info.dateStr)
+
+      if (selectedDate < now) {
+        this.error = "Cannot book a tee time in the past."
+        this.showError = true
+        return
+      }
+      const playersInput = prompt("Number of players?")
+      const players = parseInt(playersInput, 10)
+
+      if (!Number.isInteger(players) || players <= 0 || players > 4) {
+        this.error = "Players must be an integer between 1 and 4."
+        this.showError = true
+        return
+      }
     
-      let cart = prompt("Will the player(s) have a cart? (Y/N)")
-      let hasCart = false
-
-      if(cart === 'Y' || cart === 'y') {
-        hasCart = true;
+      const cart = prompt("Will the player(s) have a cart? (Y/N)")
+      if (!cart || !['Y', 'y', 'N', 'n'].includes(cart)) {
+        this.error = "Cart must be Y or N."
+        this.showError = true
+        return
       }
-      else {
-        hasCart = false;
-      }
+      const hasCart = cart.toLowerCase() === 'y'
 
-      let startHole = parseInt(prompt("Starting hole? (1 or 10)"), 10)
+      const holeInput = prompt("Starting hole? (1 or 10)")
+      const startHole = parseInt(holeInput, 10)
+
+      if (!Number.isInteger(startHole) || (startHole !== 1 && startHole !== 10)) {
+        this.error = "Starting hole must be either 1 or 10."
+        this.showError = true
+        return
+      }
 
       const newBooking = {
         timeval: info.dateStr,
@@ -107,10 +138,20 @@ export default {
         calendarApi.addEvent(newEvent)
       } catch (err) {
         this.error = "Tee time could not be booked."
+        this.showError = true
       }
     },
 
     async handleEventClick(info) {
+      this.error = null
+      const now = new Date()
+      const selectedDate = new Date(info.dateStr)
+
+      if (selectedDate < now) {
+        this.error = "Cannot delete a tee time in the past."
+        this.showError = true
+        return
+      }
 
       if (!confirm("Delete this tee time?")) return
 
@@ -120,16 +161,18 @@ export default {
         info.event.remove()
       } catch (err) {
         this.error = 'Contact admin to delete tee time.'
+        this.showError = true
       }
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .calendar-container {
-  max-width: 900px;
-  margin: auto;
+  flex: 1;
+  height: 100%;
+  padding-left: 15px;
 }
 .error {
     justify-content: center;
@@ -137,6 +180,14 @@ export default {
     align-self: center;
     display: flex;
     color:red;
+    font-size: 20px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: black; 
 }
 
 </style>

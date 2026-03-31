@@ -4,10 +4,20 @@ module.exports = {
     async createSchedule(req, res) {
         try {
             const schedule = await Schedule.create(req.body)
+            const employee = await Employee.findOne({
+                where: {id: req.body.schedule_employeeid},
+                attributes:['employee_uid']
+            })
+
+            const user= await User.findOne({
+                where: {uid: employee.employee_uid},
+                attributes: ['firstname']
+            })
 
             const scheduleJson = schedule.toJSON()
+            scheduleJson.firstname = user.firstname
 
-            res.send(scheduleJson)
+            return res.send(scheduleJson)
         } catch(err) {
             res.status(400).send({
                 error: 'Schedule could not be created.'
@@ -34,7 +44,7 @@ module.exports = {
                 firstname: s.employee.user.firstname
             }))
 
-            res.send(result)
+            return res.send(result)
         } catch(err) {
             res.status(400).send({
                 error: 'Schedules could not be loaded.'
@@ -72,9 +82,8 @@ module.exports = {
             endtime: req.body.endtime
             })
 
-            res.send(schedule.toJSON())
+            return res.send(schedule.toJSON())
         } catch (err) {
-            console.error(err)
             res.status(400).send({
             error: 'Schedule could not be updated'
             })
@@ -94,7 +103,7 @@ module.exports = {
 
             await schedule.destroy()
 
-            res.send({
+            return res.send({
             message: 'Schedule deleted successfully'
             })
 

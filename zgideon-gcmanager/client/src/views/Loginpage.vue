@@ -81,8 +81,7 @@ export default {
     width:100%;
     display: flex;
     flex-direction: column;
-    align-content: center;
-    justify-items: center;
+    box-sizing: border-box;
     background-color: rgba(84, 231, 241, 0.815);
     border: 10px solid blue;
 }
@@ -90,6 +89,7 @@ export default {
 #headerNav {
     display: flex;
     align-items: center;
+    box-sizing:border-box;
     padding: 15px 25px;
     background-color: blue;
     width:100%;
@@ -98,6 +98,7 @@ export default {
 
 #gcManager {
     font-weight: 600;
+    font-size: 24px;
 }
 
 #routerLink {
@@ -106,6 +107,7 @@ export default {
     font-size: 1.5em;
     border-radius: 6px;
     text-decoration: none;
+    height: 100%;
     color:white;
     transition: background 0.2s;
 }
@@ -117,8 +119,9 @@ export default {
 
 h1 {
     text-align: center;
-    color: white;
+    color: black;
     margin-bottom: 20px;
+    font-size: 40px;
 }
 
 input {
@@ -127,6 +130,12 @@ input {
     border: 1px solid #ccc;
     font-size: 1rem;
     transition: border 0.2s, box-shadow 0.2s;;
+}
+
+input:focus {
+    outline: none;
+    border-color: blue;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
 }
 
 .formRow {
@@ -141,14 +150,24 @@ input {
 }
 
 button {
-    min-height: 35px;
-    min-width: 70px;
-    display: flow-root;
-    margin-bottom:75px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
 }
 
 button:hover {
-    background-color: blue;
+    background: #2563eb;
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 .error {
@@ -156,8 +175,13 @@ button:hover {
 }
 
 #loginForm{
-    align-items: center;
-    align-self: center;
-    justify-items: center;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin: 0 auto;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 </style>

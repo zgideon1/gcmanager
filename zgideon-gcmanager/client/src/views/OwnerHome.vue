@@ -15,11 +15,11 @@
                 </div>
 
                 <div class="sidebar-main">
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('teetimes')">
+                    <button type='button' class="button sidebarButton" @click="navigateTo('teetimes')">
                         <span class="sideBarText">Tee-Times</span>
                     </button>
 
-                    <button type='button' class="button sidebarButton" id="tournamentsButton" @click="navigateTo('tournaments')">
+                    <button type='button' class="button sidebarButton" @click="navigateTo('tournaments')">
                         <span class="sideBarText">Tournaments Editor</span>
                     </button>
 
@@ -54,15 +54,15 @@
         </div>
 
         <div v-if="showLogoutConfirm" class="modal-overlay">
-        <div class="modal">
-            <p>Are you sure you want to log out?</p>
+            <div class="modal">
+                <p>Are you sure you want to log out?</p>
 
-            <div class="modal-buttons">
-                <button @click="confirmLogout">Yes</button>
-                <button @click="showLogoutConfirm = false">Cancel</button>
+                <div class="modal-buttons">
+                    <button @click="confirmLogout">Yes</button>
+                    <button @click="showLogoutConfirm = false">Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
 </div>
 </template>
 

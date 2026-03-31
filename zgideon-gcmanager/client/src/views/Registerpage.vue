@@ -11,7 +11,7 @@
 
         <h1>Register User</h1>
 
-        <form class="container" id="loginForm" @submit.prevent="register">
+        <form id="loginForm" @submit.prevent="register">
             <div class="formRow">
                 <label for="username">Username: </label>
                 <input 
@@ -56,14 +56,9 @@
                     v-model="lastname"/>
             </div>
 
-        <br>
-
         <div v-html="error" class="error"></div>
-
-        <br>
         
-        
-        <div class="container" id="buttonBox">
+        <div id="buttonBox">
             <button class="button" @click="register" type="submit">Register</button>
         </div>
         </form>
@@ -110,9 +105,15 @@ export default {
 .container{
     height:100%;
     width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     align-content: center;
     justify-items: center;
+    justify-content: center;
+    box-sizing: border-box;
     background-color: rgb(10, 240, 240);
+    border: 10px solid blue;
 }
 
 #headerNav {
@@ -120,20 +121,23 @@ export default {
     background-color: blue;
     width:100%;
     color:white;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 15px 25px;
 }
 
 #gcManager {
-    padding-left:15px;
+    font-weight: 600;
+    font-size: 24px;
 }
 
 #routerLink {
     margin-left:auto;
-    padding-right:15px;
-    padding-top: 20px;
-    padding-left: 15px;
+    padding: 6px 12px;
     font-size: 1.5em;
     text-decoration: none;
-    color:white
+    color:white;
+    transition: background 0.2s;
 }
 
 #routerLink:hover {
@@ -141,32 +145,56 @@ export default {
     color:black;
 }
 
+h1 {
+    text-align: center;
+    color: black;
+    margin-bottom: 20px;
+}
+
 .formRow {
     display:flex;
-    align-items: center;
-    margin-bottom: 10px;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .formRow label {
-    width: 100px;
-    margin-right: 10px;
+    font-size: 0.9rem;
+    color: rgba(66, 66, 66, 0.89)
 }
 
 input {
-    min-height: 20px;
-    flex: 1;
-    min-height:25px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: border 0.2s, box-shadow 0.2s;;
+}
+
+input:focus {
+    outline: none;
+    border-color: blue;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
 }
 
 button {
-    min-height: 35px;
-    min-width: 70px;
-    display: flow-root;
-    margin-bottom: 75px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
 }
 
 button:hover {
     background-color: blue;
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 .error {
@@ -174,6 +202,13 @@ button:hover {
 }
 
 #loginForm{
-    display:inline-block;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin: 0 auto;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 </style>

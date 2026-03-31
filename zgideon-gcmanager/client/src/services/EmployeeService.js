@@ -10,10 +10,10 @@ export default {
     async createEmployee(employee) {
         return Api.post(`/employees`, employee)
     },
-    async editEmployee(id, newEmployee) {
-        return Api.put(`/employees/${id}`, newEmployee)
+    async editEmployee(id, newData) {
+        return Api.put(`/employees/${id}`, newData)
     },
     async deleteEmployee(id) {
-        return Api.delete(`/employees/${id}/delete`)
+        return Api.delete(`/employees/${id}`)
     }
 }

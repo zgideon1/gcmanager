@@ -3,7 +3,9 @@ const {users:User} = require('../models')
 module.exports = {
     async getUsers(req, res) {
         try {
-            const users = await User.findAll()
+            const users = await User.findAll({
+                attributes: ['uid', 'firstname', 'lastname','email', 'role', 'handicap', 'scorecard_id']
+            })
 
             const userJson = users.map(u => u.toJSON())
 
@@ -17,7 +19,7 @@ module.exports = {
     async getUser(req, res) {
         try {
             const user = await User.findOne({
-                where: {uid: req.params.uid}
+                where: {uid: req.params.uid}, attributes: ['uid', 'firstname', 'lastname','email', 'role', 'handicap', 'scorecard_id']
             })
 
             if(!user) {

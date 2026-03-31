@@ -13,8 +13,8 @@
                     <span class="menuButtonText">View <br>Scores</span>
                 </button>
 
-                <button type="button" class="menuButton" id="menuEmployeesButton" @click="navigateTo('employees')">
-                    <span class="menuButtonText">Employees</span>
+                <button type="button" class="menuButton" id="menuEmployeesButton" @click="navigateTo('users')">
+                    <span class="menuButtonText">User Management</span>
                 </button>
 
                 <button type="button" class="menuButton" id="menuInventoryButton" @click="navigateTo('inventory')">
@@ -169,7 +169,7 @@
 }
 
 #menuEmployeesButton {
-    background-image: url('@/imgs/Calendar_whiteblue.png');
+    background-image: url('@/imgs/Users.png');
     background-size: 50%;
     background-repeat: no-repeat
 }

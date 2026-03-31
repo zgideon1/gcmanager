@@ -1,22 +1,19 @@
 module.exports = (sequelize, DataTypes) => {
-    const Employee = sequelize.define('employees', {
+    const EmployeeType = sequelize.define('employee_types', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        employee_uid: {
-            type: DataTypes.INTEGER,
+        name: {
+            type: DataTypes.STRING,
             allowNull:false
-        },
-        type_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
         }
     }, {
-        timestamps:false
+        timestamps:false,
+        freezeTableName: true
     })
 
-    return Employee
+    return EmployeeType
 }

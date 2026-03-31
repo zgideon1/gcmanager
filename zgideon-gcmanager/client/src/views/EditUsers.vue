@@ -2,35 +2,35 @@
     <div class="content">
         <div class="sidebar">
             <div class="sidebar-top">
-                <h2>Edit Employees</h2>
-                <select v-model="selectedEmployeeId">
-                <option disabled value="">-- Select Employee --</option>
+                <h2>Edit Users</h2>
+                <select v-model="selectedUserId">
+                <option disabled value="">-- Select User --</option>
                 <option
-                    v-for="emp in employees"
-                    :key="emp.id"
-                    :value="emp.id"
+                    v-for="use in users"
+                    :key="use.uid"
+                    :value="use.uid"
                 >
-                    {{ emp.id }} {{ emp.firstname }} {{ emp.lastname }}
+                    {{ use.uid }} {{ use.firstname }} {{ use.lastname }}
                 </option>
             </select>
             </div> 
             <div class="sidebar-bottom">
-                <button type="button" @click="expandAddEmployeePage()">
-                    Add Employee
+                <button type="button" @click="expandAddUserPage()">
+                    Add User
                 </button>
 
-                <button type="button" @click="editEmployee(selectedEmployeeId)">
-                    Edit Employee Role
+                <button type="button" @click="editUser(selectedUserId)">
+                    Edit User
                 </button>
 
-                <button type="button" @click="promptDeleteEmployee">
-                    Delete Employee
+                <button type="button" @click="promptDeleteUser">
+                    Delete User
                 </button>
             </div>
         </div>
         
         <div class="panel" v-if="addEmployeePageExpanded"> 
-            <h3>Add Employee</h3>
+            <h3>Add User</h3>
             <label>User</label>
             <select v-model="selectedUserId">
                 <option disabled value="">-- Select User --</option>
@@ -55,13 +55,13 @@
                 </option>
             </select>
 
-            <button type="button" class="panelButton" @click="addEmployee">
-                Add Employee
+            <button type="button" class="panelButton" @click="addUser">
+                Add User
             </button>
         </div>
 
         <div class="panel" v-if="editEmployeePageExpanded">
-            <h3>Edit Employee's Role</h3>
+            <h3>Edit User's Information</h3>
             <p>Current Role: {{ currentEmployeeRole?.name || 'Not assigned' }}</p>
 
             <label>New Role</label>
@@ -76,15 +76,15 @@
                 </option>
             </select> 
 
-            <button type="button" class="panelButton" @click="editEmployee(selectedEmployeeId)">
-                Edit Employee
+            <button type="button" class="panelButton" @click="editUser(selectedUserId)">
+                Edit User
             </button>
         </div>
 
         <div v-if="showDeleteConfirm" class="modal-overlay">
             <div class="modal">
                 <p>Are you sure you want to delete 
-                    <strong>{{ employeeToDelete?.firstname }} {{ employeeToDelete?.lastname }}</strong>?
+                    <strong>{{ userToDelete?.firstname }} {{ userToDelete?.lastname }}</strong>?
                 </p>
 
                 <div class="modal-buttons">
@@ -97,9 +97,8 @@
 </template>
 
 <script>
-import EmployeeService from "@/services/EmployeeService"
 import UserService from "@/services/UserService"
-import EmployeeTypesService from '@/services/EmployeeTypesService'
+import RoleService from "@/services/RoleService"
 
 export default {
     data() {
@@ -107,55 +106,33 @@ export default {
             users: [],
             roles:[],
             error: null,
-            employees: [],
-            selectedEmployeeId: null,
             selectedUserId: null,
             selectedRoleId: null,
-            addEmployeePageExpanded: false,
-            editEmployeePageExpanded: false,
+            addUserPageExpanded: false,
+            editUserPageExpanded: false,
             showDeleteConfirm: false,
-            employeeToDelete: null,
-            currentEmployeeRole: null
-        }
-    },
-    computed: {
-        currentEmployeeRole() {
-            const employee = this.employees.find(emp => emp.id === this.selectedEmployeeId)
-            if (!employee) return null
-            return this.roles.find(role => role.id === employee.type_id) || null
+            userToDelete: null,
         }
     },
 
     async mounted() {
-        // Retrieve Employees
+        // Retrieve Users
         try {
-            const res1 = await EmployeeService.getEmployees()
-            this.employees = res1.data
+            const res1 = await UserService.getUsers()
+            this.users = res1.data
 
-            if (this.employees.length > 0) {
-            this.selectedEmployeeId = this.employees[0].id
+            if (this.users.length > 0) {
+            this.selectedUserId = this.users[0].uid
             }
 
         } catch (err) {
-            this.error = "Failed to load employees"
+            this.error = "Failed to load users"
         }
 
-        // Retrieve Users
+        // Retrieve Privileges (or Roles)
         try {
-            const res2 = await UserService.getUsers()
-            this.users = res2.data
-
-            if (this.users.length > 0) {
-                this.selectedUserId = this.users[0].uid
-            }
-        } catch(err) {
-            this.error = 'Failed to load users'
-        }
-
-        // Retrieve Roles
-        try {
-            const res3 = await EmployeeTypesService.getEmployeeTypes()
-            this.roles = res3.data
+            const res2 = await RoleService.getRoles()
+            this.roles = res2.data
 
             if (this.roles.length > 0) {
                 this.selectedRoleId = this.roles[0].id
@@ -165,76 +142,75 @@ export default {
         }
     },
     methods: {
-        expandAddEmployeePage() {
-            this.addEmployeePageExpanded = !this.addEmployeePageExpanded;
-            if(this.editEmployeePageExpanded) {
-                this.editEmployeePageExpanded = false
+        expandAddUserPage() {
+            this.addUserPageExpanded = !this.addUserPageExpanded;
+            if(this.editUserPageExpanded) {
+                this.editUserPageExpanded = false
             }
         },
-        expandEditEmployeePage(){
-            this.editEmployeePageExpanded = !this.editEmployeePageExpanded
-            if(this.addEmployeePageExpanded) {
-                this.addEmployeePageExpanded = false
+        expandEditUserPage(){
+            this.editUserPageExpanded = !this.editUserPageExpanded
+            if(this.addUserPageExpanded) {
+                this.addUserPageExpanded = false
             }
         },
-        async addEmployee() {
+        async addUser() {
             try {  
-                const employee = {
+                const user = {
                     employee_uid: this.selectedUserId,
                     type_id: this.selectedRoleId
                 }
-                const res = await EmployeeService.createEmployee(employee);
+                const res = await UserService.createUser(user);
 
-                const newList = await EmployeeService.getEmployees()
-                this.employees = newList.data
+                const newList = await UserService.getUsers()
+                this.users = newList.data
 
-                this.selectedEmployeeId = this.employees.length > 0 ? this.employees[0].id : null
+                this.selectedUserId = this.users.length > 0 ? this.users[0].id : null
             } catch (err) {
-                this.error = "Employee could not be created"
+                this.error = "User could not be created"
             }
 
-            this.expandAddEmployeePage()
+            this.expandAddUserPage()
         },
-        async editEmployee(id) {
+        async editUser(id) {
             try {
                 const newData = {
                     type_id: parseInt(this.selectedRoleId, 10)
                 }
 
-                const res = await EmployeeService.editEmployee(id, newData)
+                const res = await UserService.editUser(id, newData)
             } catch (err) {
-                this.error = "Employee could not be edited"
+                this.error = "User could not be edited"
             }
 
-            this.expandEditEmployeePage()
+            this.expandEditUserPage()
         },
-        promptDeleteEmployee() {
-            if (!this.selectedEmployeeId) {
-                this.error = "Please select an employee to delete.";
+        promptDeleteUser() {
+            if (!this.selectedUserId) {
+                this.error = "Please select a user to delete.";
                 return;
             }
 
-            this.employeeToDelete = this.employees.find(emp => emp.id === this.selectedEmployeeId);
+            this.userToDelete = this.users.find(use => use.id === this.selectedUserId);
             this.showDeleteConfirm = true;
         },
         async confirmDelete(id) {
            try {
-                await EmployeeService.deleteEmployee(this.employeeToDelete.id);
+                await UserService.deleteUser(this.userToDelete.id);
 
-                this.employees = this.employees.filter(emp => emp.id !== this.employeeToDelete.id);
+                this.users = this.users.filter(use => use.id !== this.userToDelete.id);
 
-                this.selectedEmployeeId = this.employees.length > 0 ? this.employees[0].id : null;
+                this.selectedUserId = this.users.length > 0 ? this.users[0].id : null;
 
                 this.showDeleteConfirm = false;
-                this.employeeToDelete = null;
-
+                this.userToDelete = null;
             } catch (err) {
-                this.error = "Employee could not be deleted.";
+                this.error = "User could not be deleted.";
             }
         },
         cancelDelete() {
             this.showDeleteConfirm = false;
-            this.employeeToDelete = null;
+            this.userToDelete = null;
         },
     }
 }
@@ -242,10 +218,9 @@ export default {
 
 <style scoped>
 .content {
-    flex: 1;
     display: flex;
-    height: 100%;
-    width: 100%;
+    padding-left: 10px;
+    gap: 20px;
 }
 
 .sidebar {

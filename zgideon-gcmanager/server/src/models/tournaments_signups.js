@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
         status: {
             type: DataTypes.STRING
         }
+    }, {
+        timestamps:false
     })
     return TournSignup
 }

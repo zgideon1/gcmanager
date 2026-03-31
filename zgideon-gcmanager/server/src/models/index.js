@@ -44,4 +44,8 @@ db.schedules.belongsTo(db.employees, {
   foreignKey: 'schedule_employeeid'
 })
 
+db.employees.belongsTo(db.employee_types, { foreignKey: 'type_id', as: 'role' });
+
+db.employee_types.hasMany(db.employees, { foreignKey: 'type_id' });
+
 module.exports = db

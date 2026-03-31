@@ -1,4 +1,4 @@
-const {employees:Employee, users:User} = require('../models')
+const {employees:Employee, users:User, schedules:Schedule, employee_types:EmployeeType} = require('../models')
 
 module.exports = {
     async createEmployee(req, res) {
@@ -7,8 +7,9 @@ module.exports = {
 
             const employeeJson = employee.toJSON()
 
-            res.send(employeeJson)
+            res.send('Employee created successfully')
         } catch(err) {
+            console.log(err)
             res.status(400).send({
                 error: 'Employee could not be created.'
             })
@@ -21,15 +22,23 @@ module.exports = {
             {
                 model: User,
                 attributes: ['uid', 'firstname', 'lastname']
-            }]})
+            },
+            {
+                model: EmployeeType,
+                as: 'role',
+                attributes: ['id', 'name']
+            }
+        ]})
 
             const employeeJson = employees.map(e => ({
                 id: e.id,
                 firstname: e.user.firstname,
-                lastname: e.user.lastname
+                lastname: e.user.lastname,
+                type_id: e.role?.id || null,
+                role_name: e.role?.name || null
             }))
 
-            res.send(employeeJson)
+            return res.send(employeeJson)
         } catch(err) {
             res.status(400).send({
                 error: 'Employees could not be loaded.'
@@ -59,7 +68,7 @@ module.exports = {
     async updateEmployee(req, res) {
         try {
             const { id } = req.params
-            const { employeeData } = req.body
+            const employeeData = req.body
 
             const employee = await Employee.findByPk(id)
 
@@ -81,9 +90,11 @@ module.exports = {
         }
     },
     async deleteEmployee(req, res) {
-        try {
+        try {       
+            const employeeId = parseInt(req.params.id, 10);
+            
             const employee = await Employee.findOne({
-                where: {id: req.params.id}
+                where: {id: employeeId}
             })
             
             if(!employee) {
@@ -93,8 +104,9 @@ module.exports = {
             }
 
             if(req.user.role === 3) {
+                await Schedule.destroy({ where: { schedule_employeeid: employee.id } });
                 await employee.destroy()
-                return res.status(204).send()
+                return res.status(200).send({message: 'Employee deleted successfully'})
             }
             else {
                 return res.status(403).send({
@@ -102,6 +114,7 @@ module.exports = {
                 })
             }
         } catch(err) {
+            console.error('Delete error:', err)
             res.status(400).send({
                 error: 'Employee could not be deleted.'
             })

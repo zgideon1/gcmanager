@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const { users } = require("../models");
-const UserController = require("../controllers/UserController")
+const AuthenticationController = require("../controllers/AuthenticationController")
+const isAuthenticated = require("../policies/isAuthenticated")
 
 router.get("/users", 
-  UserController.getUsers
+  AuthenticationController.getUsers
 );
 
-router.get("/:id",
-  UserController.getUser
+router.get("/users/:uid",
+  AuthenticationController.getUser
 );
 
 module.exports = router;

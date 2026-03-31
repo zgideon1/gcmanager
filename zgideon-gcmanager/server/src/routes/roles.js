@@ -6,7 +6,7 @@ router.get("/roles",
   RoleController.getRoles
 );
 
-router.get("/:id",
+router.get("/roles/:id",
   RoleController.getRole
 );
 

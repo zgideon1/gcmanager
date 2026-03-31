@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         }
+    }, {
+        timestamps:false
     })
 
     return Scorecard

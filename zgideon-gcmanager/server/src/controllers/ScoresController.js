@@ -7,7 +7,7 @@ module.exports = {
 
             const scoreJson = score.toJSON()
 
-            res.send(scoreJson)
+            return res.send(scoreJson)
         } catch(err) {
             res.status(400).send({
                 error: 'Score could not be recorded.'
@@ -22,7 +22,7 @@ module.exports = {
                 }
             })
 
-            res.send(scores)
+            return res.send(scores)
         } catch(err) {
             res.status(400).send({
                 error: 'Your scores could not be loaded.'
@@ -58,7 +58,7 @@ module.exports = {
                 await Promise.all(updates)
             }
 
-            res.send({ message: 'Score updated successfully' })
+            return res.send({ message: 'Score updated successfully' })
         } catch (err) {
             res.status(400).send({
                 error: 'Score could not be updated'

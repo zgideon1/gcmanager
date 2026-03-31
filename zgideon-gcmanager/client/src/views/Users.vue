@@ -1,17 +1,17 @@
 <template>
-    <div class="employees-page">
-        <div v-if="$route.path === '/ownerhome/users/employees'" class="menu" id="menuBackground">
-                <button type='button' class="menuButton" id="menuEEditingButton"  @click="navigateTo('edit')">
-                    <span class="menuButtonText">Edit<br> Employees</span>
-                </button>
+    <div id="menuBackground">
+        <div v-if="$route.path === '/ownerhome/users'" class="menu">
+            <button type='button' class="menuButton" id="menuUsersButton" @click="navigateTo('edit')">
+                <span class="menuButtonText">Edit <br>Users</span>
+            </button>
 
-                <button type='button' class="menuButton" id="menuESchedulesButton" @click="navigateTo('employeeschedules')">
-                    <span class="menuButtonText">Schedule <br>Employees</span>
-                </button>
+            <button type='button' class="menuButton" id="menuEmployeesButton"  @click="navigateTo('employees')">
+                <span class="menuButtonText">Edit<br> Employees</span>
+            </button>
 
-                <button type='button' class="menuButton" id="menuLogoutButton" @click="showLogoutConfirm = true">
-                    <span class="menuButtonText">Logout</span>
-                </button>
+            <button type='button' class="menuButton" id="menuLogoutButton" @click="showLogoutConfirm = true">
+                <span class="menuButtonText">Logout</span>
+            </button>
         </div>
 
         <div v-else class="content">
@@ -45,38 +45,42 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/ownerhome/users/employees/${page}`)
+        router.push(`/ownerhome/users/${page}`)
     }
 
     function confirmLogout() {
         store.dispatch('clearUser', store.state.user)
         router.push('/')
     }
+
 </script>
 
 <style scoped>
-.employees-page {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-.content {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex: 1;
-}
-
 .menu {
-    display: flex;
     width: 100%;
     height: 100%;
     margin-left: 7px;
-}
-#menuBackground {
+    flex-wrap: wrap;
+    width:100%;
+    height: 100%;
+    margin-left: 7px;
     display: flex;
-    flex-wrap:wrap;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+
+#menuBackground {    
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr; 
+    width: 100%;
+    height: 100%;
+
     background-color: rgb(0,0,255, 1);
 }
 
@@ -115,6 +119,11 @@
 
 }
 
+.menuButton:hover {
+    transform: scale(1.04);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
 .menuButtonText {
     position: absolute;
     bottom: 15px;
@@ -126,33 +135,26 @@
     z-index: 2;
     text-shadow: 0px 2px 6px rgba(0,0,0,0.45);
 }
-.menuButton:hover {
-    transform: scale(1.04);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-}
 
-#menuEEditingButton {
-    width: 100%;
-    height: 100%;
-    background-image: url('@/imgs/Employees.png');
-    background-repeat: no-repeat;
+#menuUsersButton {
+    background-image: url('@/imgs/Users.png');
     background-size: 50%;
+    background-repeat: no-repeat
 }
 
-#menuESchedulesButton {
-    width: 50%;
-    height: 50%;
-    background-image: url('@/imgs/Calendar_whiteblue.png');
-    background-size: 40%;
+#menuEmployeesButton {
+    background-image: url('@/imgs/Employees.png');
+    background-size: 50%;
     background-repeat: no-repeat
 }
 
 #menuLogoutButton {
-    width: 100%;
-    height: 50%;
     background-image: url('@/imgs/Logout_whiteblue.png');
     background-size: 23%;
+    width: 100%;
+    height: 50%;
     background-repeat: no-repeat;
+    grid-column: span 2;
 }
 
 .modal-overlay {

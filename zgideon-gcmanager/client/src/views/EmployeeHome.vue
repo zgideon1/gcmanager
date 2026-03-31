@@ -2,47 +2,58 @@
     <link rel="stylesheet" 
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=settings" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=home" />
-    <div class="container">
-        <div :class="['sidebar', {expanded: isExpanded}]">
-            <button class="expand-btn" @click="toggleSidebar">☰</button>
+    <div id="containerBackground">
+        <div class="container">
+            <div :class="['sidebar', {expanded: isExpanded}]">
+                <div class="sidebar-top">
+                    <button class="expand-btn" @click="toggleSidebar">☰</button>
 
-            <button class="button sidebarButton" @click="navigateTo('')" id="homeButton">
-                <span class="sideBarText"> Home
-                </span>
-            </button>
+                    <button class="button sidebarButton" @click="navigateTo('')" id="homeButton">
+                        <span class="sideBarText"> Home
+                        </span>
+                    </button>
+                </div>
 
-            <div class="sidebar-main">
-                <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('schedules')">
-                    <span class="sideBarText">Upcoming Schedule</span>
-                </button>
+                <div class="sidebar-main">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('schedules')">
+                        <span class="sideBarText">Scheduling</span>
+                    </button>
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('teetimes')">
+                        <span class="sideBarText">Tee-Times</span>
+                    </button>
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('scores')">
+                        <span class="sideBarText">Scores</span>
+                    </button>
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('tournaments')">
+                        <span class="sideBarText">Tournaments</span>
+                    </button>
+                </div>
 
-                <button type='button' class="button sidebarButton" id="employeesButton" @click="navigateTo('userhome')">
-                    <span class="sideBarText">Customer Dashboard</span>
-                </button>
+                <div class="sidebar-bottom">
+                    <button type='button' class="button sidebarButton" id="settingsButton">
+                        <span class="material-symbols-outlined">
+                        settings
+                        </span>
+                    </button>
+                    <br>
+                    <button type='button' class="button sidebarButton" id="logoutButton" @click="showLogoutConfirm = true">
+                        <span class="sideBarText">Logout</span>
+                    </button>
+                </div>
             </div>
-
-            <button type='button' class="button sidebarButton" id="settingsButton">
-                <span class="material-symbols-outlined">
-                settings
-                </span>
-            </button>
-            <br>
-            <button type='button' class="button sidebarButton" id="logoutButton" @click="showLogoutConfirm = true">
-                <span class="sideBarText">Logout</span>
-            </button>
+            <div class="content">
+                <router-view />
+            </div>
         </div>
-        <div class="content">
-            <router-view />
-        </div>
-    </div>
 
     <div v-if="showLogoutConfirm" class="modal-overlay">
-    <div class="modal">
-        <p>Are you sure you want to log out?</p>
+        <div class="modal">
+            <p>Are you sure you want to log out?</p>
 
-        <div class="modal-buttons">
-            <button @click="confirmLogout">Yes</button>
-            <button @click="showLogoutConfirm = false">Cancel</button>
+            <div class="modal-buttons">
+                <button @click="confirmLogout">Yes</button>
+                <button @click="showLogoutConfirm = false">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
@@ -73,14 +84,20 @@
 </script>
 
 <style scoped>
+#containerBackground {
+    background-color: blue;
+}
 .container {
-        display: flex;
-        height: 100vh;
-    }
+    display: flex;
+    height: 95vh;
+    width: 100%;
+}
 
 .content {
     flex: 1;
+    display: flex;
     height: 100%;
+    width: 100%;
 }
 
 .sidebar {
@@ -92,17 +109,29 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
 
 .sidebar.expanded {
     width: 220px;
 }
 
+.sidebar-top {
+    display: flex;
+    flex-direction: column;
+}
+
 .sidebar-main {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 35px;
+}
+
+.sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
 }
 
 .sidebarButton {

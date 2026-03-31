@@ -1,5 +1,5 @@
 <template>
-    <div class="content-bg">
+    <div class="content">
         <div class="header" id="header">
             <span id="headerTitle">Employee Scheduling</span>
         </div>
@@ -13,38 +13,35 @@
 import FullCalendar from "../components/EmployeeCalendar.vue"
 </script>
 
-<script>
-export default {
-    components: {FullCalendar},
-}
-</script>
 
-<style>
+<style scoped>
 #header {
     align-self: center;
     justify-self: center;
     font-size: 40px;
     color: black;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     border: 2px;
     border-color: white;
 }
 
-.content-bg {
-    background-color: lightblue;
-    width: 100%;
-    height: 90%;
+.content {
+    flex: 1;
     display: flex;
+    height: 90%;
+    width: 95%;
     flex-direction: column;
+    background-color: lightblue;
+    padding: 15px;
 }
 
 #calendar {
     background: white;
     border-radius: 10px;
     flex: 1 1 auto;
-    min-width: 90%;
     display: flex;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 10px;
 }
 
 .calendar-container, 

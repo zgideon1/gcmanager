@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
         sid: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
+            allowNull:false
         },
         schedule_employeeid: {
             type:DataTypes.INTEGER,

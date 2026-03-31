@@ -7,9 +7,9 @@ export default {
     async getUser(id) {
         return Api.get(`/users/${id}`)
     },
-    // async createUser(user) {
-    //     return Api.post(`/users/`, user)
-    // },
+    async createUser(user) {
+        return Api.post(`/users/`, user)
+    },
     async editUser(id, newUser) {
         return Api.put(`/users/${id}`, newUser)
     },

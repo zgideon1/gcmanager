@@ -1,12 +1,20 @@
 <template>
     <div class="menu">
         <div id="menuBackground">
-            <button type='button' class="menuButton" id="menuEmployeesButton"  @click="navigateTo('employeehome/schedules')">
+            <button type='button' class="menuButton" id="menuEmployeesButton"  @click="navigateTo('schedules')">
                 <span class="menuButtonText">View Your<br> Upcoming Schedule</span>
             </button>
 
-            <button type='button' class="menuButton" id='menuUHButton' @click="navigateTo('userhome')">
-                <span class="menuButtonText">Go to <br> Customer Dashboard</span>
+            <button type='button' class="menuButton" id='menuScoresButton' @click="navigateTo('scores')">
+                <span class="menuButtonText">Score Recording<br> & History</span>
+            </button>
+
+            <button type='button' class="menuButton" id="menuTournamentsButton" @click="navigateTo('tournaments')">
+                <span class="menuButtonText">Upcoming<br> Tournaments</span>
+            </button>
+
+            <button type='button' class="menuButton tee" id="menuTeeTimesButton" @click="navigateTo('teetimes')">
+                <span class="menuButtonText">Schedule a <br>Tee Time</span>
             </button>
 
             <button type='button' class="menuButton" id='menuLogoutButton' @click="showLogoutConfirm = true">
@@ -41,7 +49,7 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/${page}`)
+        router.push(`/employeehome/${page}`)
     }
 
     function confirmLogout() {
@@ -52,10 +60,10 @@
 
 <style scoped>
 .container {
-        display: flex;
-        height: 100vh;
-        width: 100%;
-    }
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
 
 .menu {
     display: flex;
@@ -69,8 +77,7 @@
 
 #menuBackground {
     display: grid;
-    flex-wrap:wrap;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
     width: 100%;
     height: 100%;
@@ -129,16 +136,28 @@
     box-shadow: 0 12px 30px rgba(0,0,0,0.25);
 }
 
-#menuUHButton {
-    background-image: url('@/imgs/Home.png');
-    background-size: 45% 80%;
-    background-repeat: no-repeat;
-}
-
 #menuEmployeesButton {
     background-image: url('@/imgs/Calendar_whiteblue.png');
     background-size: 40%;
     background-repeat: no-repeat
+}
+
+#menuScoresButton {
+    background-image: url('@/imgs/Scores.png');
+    background-size:42%;
+    background-repeat: no-repeat;
+}
+
+#menuTeeTimesButton {
+    background-image: url('@/imgs/TeeTimes.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+}
+
+#menuTournamentsButton {
+    background-image: url('@/imgs/Tournaments.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
 }
 
 #menuLogoutButton {
@@ -160,10 +179,6 @@
         rgba(0,0,0,0.45),
         rgba(0,0,0,0)
     ); */
-}
-
-#menuScoreButton {
-    background-image: url("golf-scorecard.jpg");
 }
 
 
