@@ -115,7 +115,6 @@ export default {
             editEmployeePageExpanded: false,
             showDeleteConfirm: false,
             employeeToDelete: null,
-            currentEmployeeRole: null
         }
     },
     computed: {

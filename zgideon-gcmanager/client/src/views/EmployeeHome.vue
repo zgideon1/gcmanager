@@ -8,23 +8,23 @@
                 <div class="sidebar-top">
                     <button class="expand-btn" @click="toggleSidebar">☰</button>
 
-                    <button class="button sidebarButton" @click="navigateTo('')" id="homeButton">
+                    <button class="button sidebarButton" @click="navigateTo('employee-dashboard')" id="homeButton">
                         <span class="sideBarText"> Home
                         </span>
                     </button>
                 </div>
 
                 <div class="sidebar-main">
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('schedules')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-schedules')">
                         <span class="sideBarText">Scheduling</span>
                     </button>
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('teetimes')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-teetimes')">
                         <span class="sideBarText">Tee-Times</span>
                     </button>
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('scores')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-scores')">
                         <span class="sideBarText">Scores</span>
                     </button>
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('tournaments')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-tournaments')">
                         <span class="sideBarText">Tournaments</span>
                     </button>
                 </div>
@@ -74,7 +74,7 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/employeehome/${page}`)
+        router.push({name: `${page}`})
     }
 
     function confirmLogout() {

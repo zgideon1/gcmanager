@@ -179,7 +179,7 @@ export default {
     async handleDeleteClick(info) {
       this.error = null
       const now = new Date()
-      const selectedDate = new Date(info.dateStr)
+      const selectedDate = new Date(info.event.start)
 
       if (selectedDate < now) {
         this.error = "Cannot delete a past schedule"
@@ -258,6 +258,7 @@ export default {
   border: 2px solid lightblue;
   border-radius: 6px;
   height: 7%;
+  width: 90%;
 }
 
 .calendar-container {

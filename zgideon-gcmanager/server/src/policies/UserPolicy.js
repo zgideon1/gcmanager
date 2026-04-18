@@ -8,6 +8,7 @@ module.exports = {
             username: Joi.string().required(),
             firstname: Joi.string().min(1).required(),
             lastname: Joi.string().min(1).required(),
+            role: Joi.number().integer().required()
         });
         
         const { error, value } = schema.validate(req.body);
@@ -31,6 +32,10 @@ module.exports = {
                 case 'lastname':
                     return res.status(400).send({
                         error: 'Last name is required'
+                    })
+                case 'role':
+                    return res.stats(400).send({
+                        error: 'Invalid role'
                     })
                 default:
                     return res.status(400).send({

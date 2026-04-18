@@ -1,7 +1,7 @@
 <template>
     <div class="menu">
         <div id="menuBackground">
-                <button type='button' class="menuButton" id="menuTeeTimesButton"  @click="navigateTo('teetimes')">
+                <button type='button' class="menuButton" id="menuTeeTimesButton"  @click="navigateTo('owner-teetimes')">
                     <span class="menuButtonText">Tee-Times<br> Book</span>
                 </button>
 
@@ -9,7 +9,7 @@
                     <span class="menuButtonText">Tournaments <br>Editor</span>
                 </button>
 
-                <button type='button' class="menuButton" id="menuScoresButton" @click="navigateTo('scores')">
+                <button type='button' class="menuButton" id="menuScoresButton" @click="navigateTo('owner-scores')">
                     <span class="menuButtonText">View <br>Scores</span>
                 </button>
 
@@ -53,7 +53,8 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/ownerhome/${page}`)
+        //router.push(`././${page}`)
+        router.push({name: page})
     }
 
     function confirmLogout() {

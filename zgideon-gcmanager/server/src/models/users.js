@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     phoneNum: {
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull: true
     },
     address: {
@@ -49,6 +49,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     lastname: {
       type: DataTypes.STRING
+    },
+    handicap: {
+      type: DataTypes.INTEGER
+    },
+    scorecard_id: {
+      type: DataTypes.INTEGER
     }
   }, {
     timestamps:false,

@@ -1,17 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-    const Scorecard = sequelize.define('course_scorecard', {
+    const CourseScorecard = sequelize.define('course_scorecards', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
-        name_id: {
-            type: DataTypes.INTEGER,
+        name: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     }, {
         timestamps:false
     })
 
-    return Scorecard
+    return CourseScorecard
 }

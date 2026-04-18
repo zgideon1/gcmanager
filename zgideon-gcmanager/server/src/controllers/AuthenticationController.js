@@ -63,7 +63,7 @@ module.exports = {
     async getUsers(req, res) {
         try {
             const users = await User.findAll({
-                attributes: ['uid', 'firstname', 'lastname','email', 'role', 'handicap']
+                attributes: ['uid', 'username', 'firstname', 'lastname','email', 'phoneNum', 'address', 'role', 'handicap']
             })
 
             const userJson = users.map(u => u.toJSON())
@@ -78,7 +78,7 @@ module.exports = {
     async getUser(req, res) {
         try {
             const user = await User.findOne({
-                where: {uid: req.params.uid}, attributes: ['uid', 'firstname', 'lastname','email', 'role', 'handicap']
+                where: {uid: req.params.uid}, attributes: ['uid', 'username', 'firstname', 'lastname','email', 'phoneNum', 'address', 'role', 'handicap']
             })
 
             if(!user) {
@@ -91,8 +91,65 @@ module.exports = {
             return res.send(userJson)
         } catch(err) {
             res.status(400).send({
-                error: 'User could not be loaded'
+                error: 'User could not be loaded.'
             })
+        }
+    },
+    async editUser(req, res) {
+        try {
+            const { uid } = req.params
+            const { email, username, firstname, lastname, address, phoneNum, role, handicap} = req.body;
+
+            const user = await User.findByPk(uid)
+
+            if (!user) {
+                return res.status(404).send({ error: 'User not found' })
+            }
+
+            if (req.user.role != 3) {
+                return res.status(403).send({ error: 'Unauthorized' })
+            }
+
+           await user.update({
+                email,
+                username,
+                firstname,
+                lastname,
+                address,
+                phoneNum,
+                role: Number(role),
+                handicap: Number(handicap)
+            });
+
+            res.send({ message: 'User updated successfully' })
+        } catch(err) {
+            console.log(err)
+            return res.status(500).send({
+                error: 'User could not be updated.'
+            })
+        }
+    },
+    async deleteUser(req, res) {
+        try {
+            const user = await User.findOne({
+                where: {uid: req.params.uid}
+            })
+
+            if(!user) {
+                return res.status(400).send( {
+                    error: 'User could not be found with specified id.'
+                })
+            }
+
+            await user.destroy()
+
+            return res.status(200).send({
+                message: 'User deleted successfully.'
+            });
+        } catch(err) {
+            return res.status(500).send({
+                error: 'The spcecified user could not be deleted.'
+            });
         }
     }
 }

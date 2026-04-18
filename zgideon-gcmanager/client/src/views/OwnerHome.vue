@@ -8,30 +8,30 @@
                 <div class="sidebar-top">
                     <button class="expand-btn" @click="toggleSidebar">☰</button>
 
-                    <button class="button sidebarButton" @click="navigateTo('')" id="homeButton">
+                    <button class="button sidebarButton" @click="navigateTo('owner-dashboard')" id="homeButton">
                         <span class="sideBarText"> Home
                         </span>
                     </button>
                 </div>
 
                 <div class="sidebar-main">
-                    <button type='button' class="button sidebarButton" @click="navigateTo('teetimes')">
+                    <button type='button' class="button sidebarButton" @click="navigateTo('owner-teetimes')">
                         <span class="sideBarText">Tee-Times</span>
                     </button>
 
-                    <button type='button' class="button sidebarButton" @click="navigateTo('tournaments')">
-                        <span class="sideBarText">Tournaments Editor</span>
+                    <button type='button' class="button sidebarButton" @click="navigateTo('owner-tournaments')">
+                        <span class="sideBarText">Tournaments</span>
                     </button>
 
-                    <button type="button" class="button sidebarButton" @click="navigateTo('employees')">
-                        <span class="sideBarText">Employees</span>
+                    <button type="button" class="button sidebarButton" @click="navigateTo('users')">
+                        <span class="sideBarText">Users</span>
                     </button>
 
                     <button type="button" class="button sidebarButton" @click="navigateTo('inventory')">
-                        <span class="sideBarText">Inventory Management</span>
+                        <span class="sideBarText">Inventory</span>
                     </button>
 
-                    <button type='button' class="button sidebarButton" @click="navigateTo('scores')">
+                    <button type='button' class="button sidebarButton" @click="navigateTo('owner-scores')">
                         <span class="sideBarText">View Scores</span>
                     </button>
                 </div>
@@ -81,7 +81,7 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/ownerhome/${page}`)
+        router.push({name: `${page}`})
     }
 
     function confirmLogout() {

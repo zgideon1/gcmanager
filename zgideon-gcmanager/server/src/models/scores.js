@@ -1,19 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
     const Score = sequelize.define('scores', {
-        scoreid: {
+        id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
         },
-        scores_uid: {
+        score_uid: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        gametype: {
-            type: DataTypes.STRING
-        },
-        dateval: {
-            type: DataTypes.STRING,
+        timeval: {
+            type: DataTypes.DATE,
             allowNull: false
         }
     }, {

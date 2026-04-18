@@ -45,7 +45,7 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/ownerhome/users/${page}`)
+        router.push(`./users/${page}`)
     }
 
     function confirmLogout() {
@@ -138,13 +138,13 @@
 
 #menuUsersButton {
     background-image: url('@/imgs/Users.png');
-    background-size: 50%;
+    background-size: 45%;
     background-repeat: no-repeat
 }
 
 #menuEmployeesButton {
     background-image: url('@/imgs/Employees.png');
-    background-size: 50%;
+    background-size: 45%;
     background-repeat: no-repeat
 }
 

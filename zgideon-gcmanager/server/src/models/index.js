@@ -26,26 +26,31 @@ db.teetimes.belongsTo(db.users, {
     foreignKey: 'tt_user_id',
     targetKey: 'uid'
 })
-
 db.users.hasMany(db.teetimes, {
   foreignKey: 'tt_user_id',
   sourceKey: 'uid'
 })
 
+
 db.users.hasOne(db.employees, {
   foreignKey: 'employee_uid'
 })
-
 db.employees.belongsTo(db.users, {
     foreignKey: 'employee_uid'
 })
+
 
 db.schedules.belongsTo(db.employees, {
   foreignKey: 'schedule_employeeid'
 })
 
-db.employees.belongsTo(db.employee_types, { foreignKey: 'type_id', as: 'role' });
 
+db.employees.belongsTo(db.employee_types, { foreignKey: 'type_id', as: 'role' });
 db.employee_types.hasMany(db.employees, { foreignKey: 'type_id' });
+
+
+db.course_scorecards.hasMany(db.holes, { foreignKey: 'sc_id' })
+db.holes.belongsTo(db.course_scorecards, { foreignKey: 'sc_id' })
+
 
 module.exports = db

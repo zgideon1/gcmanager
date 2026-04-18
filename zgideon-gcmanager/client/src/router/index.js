@@ -14,36 +14,52 @@ import EmployeeSchedules from '@/views/EmployeeSchedules.vue'
 import EditEmployees from '@/views/EditEmployees.vue'
 import Users from '@/views/Users.vue'
 import EditUsers from '@/views/EditUsers.vue'
+import PostScores from '@/views/PostScores.vue'
+import ViewScores from '@/views/ViewScores.vue'
+import Scorecards from '@/views/Scorecards.vue'
 
 const routes = [
-    { path: '/', component: Loginpage },
-    { path: '/register', component: Registerpage },
-    { path: '/userhome', component: CustomerHome, 
+    { path: '/', name: 'login', component: Loginpage },
+    { path: '/register', name: 'register', component: Registerpage },
+    { path: '/userhome', name: 'userhome', component: CustomerHome, 
         children: [
-            {path: '', component: CustomerDashboard},
-            {path: 'scores', component: Scorespage},
-            {path: 'teetimes', component: TeetimeScheduler},
-            //{path: 'tournaments', component: Tournaments}
+            {path: '', name: 'customer-dashboard', component: CustomerDashboard},
+
+            {path: 'scores', name: 'customer-scores', component: Scorespage},
+            {path: 'scores/post', name: 'cs-post', component: PostScores},
+            {path: 'scores/view', name: 'cs-view', component: ViewScores},
+
+            {path: 'teetimes', name: 'customer-teetimes', component: TeetimeScheduler},
         ]
     },
-    { path: '/employeehome', component: EmployeeHome,
+    { path: '/employeehome', name: 'employeehome', component: EmployeeHome,
         children: [
-            {path: '', component: EmployeeDashboard},
-            {path: 'schedules', component: EmployeeSchedules},
-            {path: 'teetimes', component: TeetimeScheduler}
+            {path: '', name: 'employee-dashboard', component: EmployeeDashboard},
+            {path: 'schedules', name: 'employee-schedules', component: EmployeeSchedules},
+            {path: 'teetimes', name: 'employee-teetimes', component: TeetimeScheduler},
+
+            {path: 'scores', name:'employee-scores', component: Scorespage},
+            {path: 'scores/post', name: 'es-post', component: PostScores},
+            {path: 'scores/view', name: 'es-view', component: ViewScores},
         ]
      },
-    { path: '/ownerhome', component: OwnerHome,
+    { path: '/ownerhome', name: 'ownerhome', component: OwnerHome,
         children: [
-            {path: '', component: OwnerDashboard},
-            {path: 'teetimes', component: TeetimeScheduler},
-            {path: 'scores', component: Scorespage},
-            {path: 'users', component: Users, children:[
-                {path: 'edit', component: EditUsers},
-                {path: 'employees', component: Employees, children:[
-                        {path:'edit', component: EditEmployees},
-                        {path:'employeeschedules', component: EmployeeSchedules}
-                    ]}
+            {path: '', name: 'owner-dashboard', component: OwnerDashboard},
+            {path: 'teetimes', name: 'owner-teetimes', component: TeetimeScheduler},
+
+            {path: 'scores', name: 'owner-scores', component: Scorespage},
+            {path: 'scores/post', name: 'os-post', component: PostScores},
+            {path: 'scores/view', name: 'os-view', component: ViewScores},
+
+            {path: 'scorecards', name: 'scorecards', component: Scorecards},
+
+            {path: 'users', name: 'users', component: Users, children:[
+                {path: 'edit', name: 'users-edit', component: EditUsers},
+                {path: 'employees', name: 'employees', component: Employees, children:[
+                        {path:'edit', name: 'employees-edit', component: EditEmployees},
+                        {path:'employeeschedules', name: 'employees-schedules', component: EmployeeSchedules}
+                ]}
             ]}
         ]
      }

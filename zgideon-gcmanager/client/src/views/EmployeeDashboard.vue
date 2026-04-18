@@ -1,19 +1,19 @@
 <template>
     <div class="menu">
         <div id="menuBackground">
-            <button type='button' class="menuButton" id="menuEmployeesButton"  @click="navigateTo('schedules')">
+            <button type='button' class="menuButton" id="menuEmployeesButton"  @click="navigateTo('employee-schedules')">
                 <span class="menuButtonText">View Your<br> Upcoming Schedule</span>
             </button>
 
-            <button type='button' class="menuButton" id='menuScoresButton' @click="navigateTo('scores')">
+            <button type='button' class="menuButton" id='menuScoresButton' @click="navigateTo('employee-scores')">
                 <span class="menuButtonText">Score Recording<br> & History</span>
             </button>
 
-            <button type='button' class="menuButton" id="menuTournamentsButton" @click="navigateTo('tournaments')">
+            <button type='button' class="menuButton" id="menuTournamentsButton" @click="navigateTo('employee-tournaments')">
                 <span class="menuButtonText">Upcoming<br> Tournaments</span>
             </button>
 
-            <button type='button' class="menuButton tee" id="menuTeeTimesButton" @click="navigateTo('teetimes')">
+            <button type='button' class="menuButton tee" id="menuTeeTimesButton" @click="navigateTo('employee-teetimes')">
                 <span class="menuButtonText">Schedule a <br>Tee Time</span>
             </button>
 
@@ -49,7 +49,7 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/employeehome/${page}`)
+        router.push({name: page})
     }
 
     function confirmLogout() {

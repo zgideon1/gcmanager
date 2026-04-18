@@ -45,7 +45,7 @@
     }   
 
     function navigateTo(page) {
-        router.push(`/ownerhome/users/employees/${page}`)
+        router.push(`./employees/${page}`)
     }
 
     function confirmLogout() {
@@ -132,16 +132,12 @@
 }
 
 #menuEEditingButton {
-    width: 100%;
-    height: 100%;
     background-image: url('@/imgs/Employees.png');
     background-repeat: no-repeat;
-    background-size: 50%;
+    background-size: 45%;
 }
 
 #menuESchedulesButton {
-    width: 50%;
-    height: 50%;
     background-image: url('@/imgs/Calendar_whiteblue.png');
     background-size: 40%;
     background-repeat: no-repeat

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const ScoreHole = sequelize.define('hole_scores', {
+    const HoleScore = sequelize.define('hole_scores', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        holenum: {
+        hole_id: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
@@ -21,5 +21,5 @@ module.exports = (sequelize, DataTypes) => {
         timestamps:false
     })
 
-    return ScoreHole
+    return HoleScore
 }
