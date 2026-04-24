@@ -1,19 +1,19 @@
 <template>
   <div class="scores-page">
         <div class="menu" id="menuBackground">
-                <button type='button' class="menuButton" id="menuVSButton"  @click="navigateTo('view')">
-                    <span class="menuButtonText">View Your<br> Past Scores</span>
+                <button type='button' class="menuButton" id="menuVSButton"  @click="navigateTo('scores-view')">
+                    <span class="menuButtonText">View <br> Past Scores</span>
                 </button>
 
-                <button type='button' class="menuButton" id="menuESButton" @click="navigateTo('os-post')">
+                <button type='button' class="menuButton" id="menuESButton" @click="navigateTo('scores-post')">
                     <span class="menuButtonText">Post a <br>Score</span>
                 </button>
 
-                <button type="button" class="menuButton" id="menuSCButton" @click="navigateTo('scorecards')">
+                <button v-if="isOwner" type="button" class="menuButton" id="menuSCButton" @click="navigateTo('scorecards')">
                     <span class="menuButtonText">Create a <br>Scorecard</span>
                 </button>
 
-                <button type='button' class="menuButton" id="menuLogoutButton" @click="showLogoutConfirm = true">
+                <button type='button' class="menuButton" id="menuLogoutButton" :class="{ fullWidth: !isOwner }" @click="showLogoutConfirm = true">
                     <span class="menuButtonText">Logout</span>
                 </button>
         </div>
@@ -45,25 +45,42 @@
   const store = useStore()
   const showLogoutConfirm = ref(false)
 
-  function navigateTo(page) {
-//     const routeName = router.currentRoute.value.name
-
-//     console.log(routeName)
-    
-//     if (routeName.includes('customer-scores')) {
-//         router.push({ name: page === 'post' ? 'cs-post' : 'cs-view' })
-//     } else if (routeName.includes('employee-scores')) {
-//         router.push({ name: page === 'post' ? 'es-post' : 'es-view' })
-//     } else if (routeName.includes('owner-scores')) {
-//         router.push({ name: page === 'post' ? 'os-post' : 'os-view' })
-//     }
-    router.push({name: `${page}`})
-}
-
   function confirmLogout() {
       store.dispatch('clearUser', store.state.user)
       router.push('/')
   }
+</script>
+
+<script>
+export default{
+    data() {
+        return {
+            isOwner: false,
+            rolename: ''
+        }
+    },
+    async mounted() {
+        if(this.$store.state.user.role === 3) {
+            this.isOwner = true
+        }
+    },
+    methods: {
+        navigateTo(page) {
+            if(this.$store.state.user.role === 1) {
+                this.rolename = "customer"
+            }
+            else if(this.$store.state.user.role === 2) {
+                this.rolename = "employee"
+            }
+            else {
+                this.rolename = "owner"
+            }
+            this.$router.push({name: `${this.rolename}-${page}`})
+
+            console.log(this.$route)
+        }
+    }
+}
 </script>
 
 <style scoped>
@@ -163,7 +180,7 @@
     width: 50%;
     height: 50%;
     background-image: url('@/imgs/Scorecard.png');
-    background-size: 60%;
+    background-size: 45%;
     background-repeat: no-repeat
 }
 
@@ -171,8 +188,12 @@
     width: 50%;
     height: 50%;
     background-image: url('@/imgs/Logout_whiteblue.png');
-    background-size: 23%;
+    background-size: 35%;
     background-repeat: no-repeat;
+}
+
+.fullWidth {
+    width: 100% !important;
 }
 
 .modal-overlay {

@@ -4,6 +4,7 @@ import createPersistedState from 'vuex-persistedstate'
 const getDefaultState = () => ({
     token: null,
     user: null,
+    scorecard: null,
     isUserLoggedIn: false
 })
 
@@ -27,6 +28,9 @@ export default createStore( {
         },
         clearUser(state, user) {
             Object.assign(state, getDefaultState())
+        },
+        setScorecard(state, scorecard) {
+            state.scorecard = scorecard
         }
     },
     actions: {
@@ -38,6 +42,12 @@ export default createStore( {
         },
         clearUser({commit}, user){
             commit('clearUser', user)
+        },
+        async fetchScorecard({ commit, state }) {
+            if (!state.user?.scorecard_id) return
+
+            const res = await ScorecardService.getScorecard(state.user.scorecard_id)
+            commit('setScorecard', res)
         }
     }
 })

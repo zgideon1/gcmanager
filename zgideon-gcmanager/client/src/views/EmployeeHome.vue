@@ -15,16 +15,16 @@
                 </div>
 
                 <div class="sidebar-main">
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-schedules')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employees-schedules')">
                         <span class="sideBarText">Scheduling</span>
                     </button>
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-teetimes')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('teetimes')">
                         <span class="sideBarText">Tee-Times</span>
                     </button>
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-scores')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('scores')">
                         <span class="sideBarText">Scores</span>
                     </button>
-                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('employee-tournaments')">
+                    <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('tournaments')">
                         <span class="sideBarText">Tournaments</span>
                     </button>
                 </div>
@@ -71,16 +71,38 @@
 
     function toggleSidebar() {
     isExpanded.value = !isExpanded.value
-    }   
-
-    function navigateTo(page) {
-        router.push({name: `${page}`})
     }
 
     function confirmLogout() {
         store.dispatch('clearUser', store.state.user)
         router.push('/')
     }
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            rolename: ''
+        }
+    },
+    methods: {
+        navigateTo(page) {
+            if(this.$store.state.user.role === 1) {
+                this.rolename = "customer"
+            }
+            else if(this.$store.state.user.role === 2) {
+                this.rolename = "employee"
+            }
+            else {
+                this.rolename = "owner"
+            }
+            this.$router.push({name: `${this.rolename}-${page}`})
+
+            console.log(this.$route)
+        }
+    }
+}
 </script>
 
 <style scoped>

@@ -1,16 +1,32 @@
-const {scores:Score, holes:Hole} = require('../models')
+const {scores:Score, hole_scores:HoleScore} = require('../models')
 
 module.exports = {
     async postScore(req, res) {
         try {
-            const score = await Score.create(req.body)
+            const { score_uid, hole_scores, timeval } = req.body
 
-            const scoreJson = score.toJSON()
+            const score = await Score.create(
+                {
+                    score_uid,
+                    timeval,
+                    hole_scores: hole_scores
+                },
+                {
+                    include: [{ model: HoleScore }]
+                }
+            )
 
-            return res.send(scoreJson)
-        } catch(err) {
-            res.status(400).send({
-                error: 'Score could not be recorded.'
+            const result = await Score.findOne({
+                where: { id: score.id },
+                include: [HoleScore]
+            })
+
+            return res.status(200).send(result)
+
+        } catch (err) {
+            console.log(err)
+            return res.status(400).send({
+                error: 'Score could not be created.'
             })
         }
     },

@@ -1,19 +1,19 @@
 <template>
     <div class="menu">
         <div id="menuBackground">
-            <button type='button' class="menuButton" id="menuEmployeesButton"  @click="navigateTo('employee-schedules')">
+            <button type='button' class="menuButton" id="menuEmployeesButton"  @click="navigateTo('schedules')">
                 <span class="menuButtonText">View Your<br> Upcoming Schedule</span>
             </button>
 
-            <button type='button' class="menuButton" id='menuScoresButton' @click="navigateTo('employee-scores')">
+            <button type='button' class="menuButton" id='menuScoresButton' @click="navigateTo('scores')">
                 <span class="menuButtonText">Score Recording<br> & History</span>
             </button>
 
-            <button type='button' class="menuButton" id="menuTournamentsButton" @click="navigateTo('employee-tournaments')">
+            <button type='button' class="menuButton" id="menuTournamentsButton" @click="navigateTo('tournaments')">
                 <span class="menuButtonText">Upcoming<br> Tournaments</span>
             </button>
 
-            <button type='button' class="menuButton tee" id="menuTeeTimesButton" @click="navigateTo('employee-teetimes')">
+            <button type='button' class="menuButton tee" id="menuTeeTimesButton" @click="navigateTo('teetimes')">
                 <span class="menuButtonText">Schedule a <br>Tee Time</span>
             </button>
 
@@ -46,16 +46,38 @@
 
     function toggleSidebar() {
     isExpanded.value = !isExpanded.value
-    }   
-
-    function navigateTo(page) {
-        router.push({name: page})
     }
 
     function confirmLogout() {
         store.dispatch('clearUser', store.state.user)
         router.push('/')
     }
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            rolename: ''
+        }
+    },
+    methods: {
+        navigateTo(page) {
+            if(this.$store.state.user.role === 1) {
+                this.rolename = "customer"
+            }
+            else if(this.$store.state.user.role === 2) {
+                this.rolename = "employee"
+            }
+            else {
+                this.rolename = "owner"
+            }
+            this.$router.push({name: `${this.rolename}-${page}`})
+
+            console.log(this.$route)
+        }
+    }
+}
 </script>
 
 <style scoped>

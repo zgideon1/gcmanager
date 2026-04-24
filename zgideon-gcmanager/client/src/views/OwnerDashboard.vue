@@ -1,7 +1,7 @@
 <template>
     <div class="menu">
         <div id="menuBackground">
-                <button type='button' class="menuButton" id="menuTeeTimesButton"  @click="navigateTo('owner-teetimes')">
+                <button type='button' class="menuButton" id="menuTeeTimesButton"  @click="navigateTo('teetimes')">
                     <span class="menuButtonText">Tee-Times<br> Book</span>
                 </button>
 
@@ -9,7 +9,7 @@
                     <span class="menuButtonText">Tournaments <br>Editor</span>
                 </button>
 
-                <button type='button' class="menuButton" id="menuScoresButton" @click="navigateTo('owner-scores')">
+                <button type='button' class="menuButton" id="menuScoresButton" @click="navigateTo('scores')">
                     <span class="menuButtonText">View <br>Scores</span>
                 </button>
 
@@ -52,15 +52,36 @@
     isExpanded.value = !isExpanded.value
     }   
 
-    function navigateTo(page) {
-        //router.push(`././${page}`)
-        router.push({name: page})
-    }
-
     function confirmLogout() {
         store.dispatch('clearUser', store.state.user)
         router.push('/')
     }
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            rolename: '',
+        }
+    },
+    methods: {
+        navigateTo(page) {
+            if(this.$store.state.user.role === 1) {
+                this.rolename = "customer"
+            }
+            else if(this.$store.state.user.role === 2) {
+                this.rolename = "employee"
+            }
+            else {
+                this.rolename = "owner"
+            }
+            this.$router.push({name: `${this.rolename}-${page}`})
+
+            console.log(this.$route)
+        }
+    }
+}
 </script>
 
 <style scoped>

@@ -7,10 +7,13 @@ export default {
     async getScorecards() {
         return Api.get('/scorecards')
     },
+    async getScorecard(id) {
+        return Api.get(`/scorecards/${id}`)
+    },
     async deleteScorecard(id) {
         return Api.delete(`/scorecards/${id}`)
     },
-    async editScorecard(id) {
-        return Api.put(`/scorecards/${id}`)
+    async editScorecard(id, newData) {
+        return Api.put(`/scorecards/${id}`, newData)
     },
 }

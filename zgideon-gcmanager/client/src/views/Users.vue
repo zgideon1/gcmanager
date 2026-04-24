@@ -1,7 +1,7 @@
 <template>
     <div id="menuBackground">
-        <div v-if="$route.path === '/ownerhome/users'" class="menu">
-            <button type='button' class="menuButton" id="menuUsersButton" @click="navigateTo('edit')">
+        <div class="menu">
+            <button type='button' class="menuButton" id="menuUsersButton" @click="navigateTo('users-edit')">
                 <span class="menuButtonText">Edit <br>Users</span>
             </button>
 
@@ -12,10 +12,6 @@
             <button type='button' class="menuButton" id="menuLogoutButton" @click="showLogoutConfirm = true">
                 <span class="menuButtonText">Logout</span>
             </button>
-        </div>
-
-        <div v-else class="content">
-            <router-view />
         </div>
 
         <div v-if="showLogoutConfirm" class="modal-overlay">
@@ -42,10 +38,6 @@
 
     function toggleSidebar() {
     isExpanded.value = !isExpanded.value
-    }   
-
-    function navigateTo(page) {
-        router.push(`./users/${page}`)
     }
 
     function confirmLogout() {
@@ -53,6 +45,32 @@
         router.push('/')
     }
 
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            rolename: ''
+        }
+    },
+    methods: {
+        navigateTo(page) {
+            if(this.$store.state.user.role === 1) {
+                this.rolename = "customer"
+            }
+            else if(this.$store.state.user.role === 2) {
+                this.rolename = "employee"
+            }
+            else {
+                this.rolename = "owner"
+            }
+            this.$router.push({name: `${this.rolename}-${page}`})
+
+            console.log(this.$route)
+        }
+    }
+}
 </script>
 
 <style scoped>
@@ -67,12 +85,6 @@
     display: flex;
 }
 
-.content {
-    flex: 1;
-    display: flex;
-    height: 100%;
-    width: 100%;
-}
 
 
 #menuBackground {    

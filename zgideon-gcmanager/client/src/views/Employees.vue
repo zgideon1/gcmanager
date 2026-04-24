@@ -1,6 +1,6 @@
 <template>
     <div class="employees-page">
-        <div v-if="$route.path === '/ownerhome/users/employees'" class="menu" id="menuBackground">
+        <div class="menu" id="menuBackground">
                 <button type='button' class="menuButton" id="menuEEditingButton"  @click="navigateTo('edit')">
                     <span class="menuButtonText">Edit<br> Employees</span>
                 </button>
@@ -14,7 +14,7 @@
                 </button>
         </div>
 
-        <div v-else class="content">
+        <div class="content">
             <router-view />
         </div>
 

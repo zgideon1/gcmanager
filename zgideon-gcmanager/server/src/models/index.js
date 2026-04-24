@@ -31,10 +31,13 @@ db.users.hasMany(db.teetimes, {
   sourceKey: 'uid'
 })
 
+db.users.hasMany(db.scores, {foreignKey: 'score_uid'})
 
 db.users.hasOne(db.employees, {
   foreignKey: 'employee_uid'
 })
+
+
 db.employees.belongsTo(db.users, {
     foreignKey: 'employee_uid'
 })
@@ -44,13 +47,18 @@ db.schedules.belongsTo(db.employees, {
   foreignKey: 'schedule_employeeid'
 })
 
-
 db.employees.belongsTo(db.employee_types, { foreignKey: 'type_id', as: 'role' });
 db.employee_types.hasMany(db.employees, { foreignKey: 'type_id' });
 
 
 db.course_scorecards.hasMany(db.holes, { foreignKey: 'sc_id' })
 db.holes.belongsTo(db.course_scorecards, { foreignKey: 'sc_id' })
+db.holes.hasMany(db.hole_scores, {foreignKey: 'score_holeid'})
 
+db.scores.belongsTo(db.users, {foreignKey: 'score_uid'})
+db.scores.hasMany(db.hole_scores, {foreignKey: 'score_id'})
+
+db.hole_scores.belongsTo(db.holes, {foreignKey: 'score_holeid'})
+db.hole_scores.belongsTo(db.scores, {foreignKey: 'score_id'})
 
 module.exports = db

@@ -15,7 +15,7 @@
             </div>
 
             <div class="sidebar-main">
-                <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('teeTimes')">
+                <button type='button' class="button sidebarButton" id="teeTimesButton" @click="navigateTo('teetimes')">
                     <span class="sideBarText">Tee-Times</span>
                 </button>
 
@@ -70,16 +70,38 @@
 
     function toggleSidebar() {
     isExpanded.value = !isExpanded.value
-    }   
-
-    function navigateTo(page) {
-        router.push(`/userhome/${page}`)
     }
 
     function confirmLogout() {
         store.dispatch('clearUser', store.state.user)
         router.push('/')
     }
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            rolename: ''
+        }
+    },
+    methods: {
+        navigateTo(page) {
+            if(this.$store.state.user.role === 1) {
+                this.rolename = "customer"
+            }
+            else if(this.$store.state.user.role === 2) {
+                this.rolename = "employee"
+            }
+            else {
+                this.rolename = "owner"
+            }
+            this.$router.push({name: `${this.rolename}-${page}`})
+
+            console.log(this.$route)
+        }
+    }
+}
 </script>
 
 <style scoped>

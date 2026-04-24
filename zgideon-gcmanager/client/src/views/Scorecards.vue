@@ -3,7 +3,7 @@
         <div class="sidebar">
             <div class="sidebar-top">
                 <h2>Edit Scorecards: </h2>
-                <select v-model="selectedSCId">
+                <select v-model.number="selectedSCId">
                     <option disabled value="">-- Select Scorecard --</option>
                     <option
                         v-for="sc in scorecards"
@@ -51,39 +51,49 @@
                     </select>
                 </div>
 
-                <table class="scorecard-table" v-if="holes.length">
+                <table class="scorecard-table" id='scorecardheader' v-if="holes.length">
                     <tr>
-                        <th>Hole</th>
-                        <td v-for="hole in holes" :key="'h' + hole.holenum">
-                            {{ hole.holenum }}
-                        </td>
+                        <th id="scorecard-title" colspan='10'>{{ scname }}</th>
                     </tr>
 
-                    <tr>
-                        <th>Par</th>
-                        <td v-for="hole in holes" :key="'p' + hole.holenum">
-                            <input
-                                type="number"
-                                v-model="hole.par"
-                                class="cell-input"
-                            />
-                        </td>
-                    </tr>
+                    <template v-for="(group, index) in groupedAddHoles" :key="index">
+        
+                        <tr class="section-header">
+                            <th colspan="10">
+                                {{ index === 0 ? 'Front 9' : index === 1 ? 'Back 9' : 'Extra ' + (index + 1) }}
+                            </th>
+                        </tr>
 
-                    <tr>
-                        <th>Yardage</th>
-                        <td v-for="hole in holes" :key="'y' + hole.holenum">
-                            <input
-                                type="number"
-                                v-model="hole.yardage"
-                                class="cell-input"
-                            />
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>Hole</th>
+                            <td v-for="hole in group" :key="'h' + hole.holenum">
+                                {{ hole.holenum }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Par</th>
+                            <td v-for="hole in group" :key="'p' + hole.holenum">
+                                <input type="number" v-model="hole.par" class="cell-input"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Yardage <br> (yds)</th>
+                            <td v-for="hole in group" :key="'y' + hole.holenum">
+                                <input type="number" v-model="hole.yardage" class="cell-input"/>
+                            </td>
+                        </tr>
+
+                        <tr class="spacer-row">
+                            <td colspan="10"></td>
+                        </tr>
+                    </template>
                 </table>
             </div>
             <div class="upanel-bottom">
-                 <button type="button" class="panelButton" @click="addSC()">
+                <div v-if="showError" v-html="error" class="error"></div>
+                <button type="button" class="panelButton" @click="addSC()">
                     Add Scorecard
                 </button>
             </div>
@@ -95,46 +105,46 @@
 
                 <table class="scorecard-table" id='scorecardheader' v-if="selectedSC_holes.length">
                     <tr>
-                        <th>
-                            <label>
-                                Name:
-                            </label>
-                        </th>
-                        <th>
-                            {{ selectedSC.name }}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>Hole</th>
-                        <td v-for="hole in selectedSC_holes" :key="'h' + hole.holenum">
-                            {{ hole.holenum }}
-                        </td>
+                        <th id="scorecard-title" colspan='10'>{{ selectedSC.name }}</th>
                     </tr>
 
-                    <tr>
-                        <th>Par</th>
-                        <td v-for="hole in selectedSC_holes" :key="'p' + hole.holenum">
-                            <input
-                                type="number"
-                                v-model="hole.par"
-                                class="cell-input"
-                            />
-                        </td>
-                    </tr>
+                    <template v-for="(group, index) in groupedEditHoles" :key="index">
+        
+                        <tr class="section-header">
+                            <th colspan="10">
+                                {{ index === 0 ? 'Front 9' : index === 1 ? 'Back 9' : 'Extra ' + (index + 1) }}
+                            </th>
+                        </tr>
 
-                    <tr>
-                        <th>Yardage</th>
-                        <td v-for="hole in selectedSC_holes" :key="'y' + hole.holenum">
-                            <input
-                                type="number"
-                                v-model="hole.yardage"
-                                class="cell-input"
-                            />
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>Hole</th>
+                            <td v-for="hole in group" :key="'h' + hole.holenum">
+                                {{ hole.holenum }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Par</th>
+                            <td v-for="hole in group" :key="'p' + hole.holenum">
+                                <input type="number" v-model="hole.par" class="cell-input"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Yardage <br> (yds)</th>
+                            <td v-for="hole in group" :key="'y' + hole.holenum">
+                                <input type="number" v-model="hole.yardage" class="cell-input"/>
+                            </td>
+                        </tr>
+
+                        <tr class="spacer-row">
+                            <td colspan="10"></td>
+                        </tr>
+                    </template>
                 </table>
             </div>
             <div class="upanel-bottom">
+                <div v-if="showError" v-html="error" class="error"></div>
                 <button type="button" class="panelButton" @click="promptEdit()">
                     Edit Scorecard
                 </button>
@@ -161,7 +171,7 @@
                 </p>
 
                 <div class="modal-buttons">
-                    <button @click="editSC(selectedSC)">Yes</button>
+                    <button @click="editSC(selectedSCId)">Yes</button>
                     <button @click="cancelEdit">Cancel</button>
                 </div>
             </div>
@@ -182,12 +192,13 @@ export default {
             showDeleteConfirm: false,
             activeDropdown: '',
             newSC: null,
-            selectedSC: null,
             selectedSCId: null,
             selectedSC_holes: [],
             scname: null,
+            scorecards:[],
             holes: [],
             holeCount: '',
+            showError: false,
         }
     },
 
@@ -198,10 +209,8 @@ export default {
             this.scorecards = res1.data
 
             if (this.scorecards.length > 0) {
-            this.selectedSCId = this.scorecards[0].id
+                this.selectedSCId = this.scorecards[0].id
             }
-            
-            this.selectedSCId = this.scorecards[0].id
         } catch (err) {
             this.error = "Failed to load scorecards"
         }
@@ -219,24 +228,30 @@ export default {
             this.selectedSC_holes = []
             }
         },
-        selectedSC(newId) {
-            const sc = this.scorecards.find(s => s.id === newId)
-
-            if (sc) {
-                this.selectedSC = sc
-            } else {
-                this.selectedSC = null
-            }
-        }
     },
     computed: {
         selectedSC() {
             return this.scorecards?.find(sc => sc.id == this.selectedSCId) || null
+        },
+        groupedEditHoles() {
+            const groups = []
+            for (let i = 0; i < this.selectedSC_holes.length; i += 9) {
+                groups.push(this.selectedSC_holes.slice(i, i + 9))
+            }
+            return groups
+        },
+        groupedAddHoles() {
+            const groups = []
+            for (let i = 0; i < this.holes.length; i += 9) {
+                groups.push(this.holes.slice(i, i + 9))
+            }
+            return groups
         }
     },
     methods: {
         generateHoles() {
             this.holes = []
+            const groups = []
 
             for (let i = 1; i <= this.holeCount; i++) {
                 this.holes.push({
@@ -272,15 +287,18 @@ export default {
                 const newList = await ScorecardService.getScorecards()
                 this.scorecards = newList.data
 
-                this.selectedSC = this.scorecards.length > 0 ? this.scorecards[0] : null
+                this.selectedSCId = this.scorecards[0]?.id || null
             } catch (err) {
                 this.error = "Scorecard could not be created"
+                this.showError = true;
+                return;
             }
             this.expandAddSCPage()
         },
         promptEdit() {
             if (!this.selectedSC) {
                 this.error = "Please select a scorecard to edit.";
+                this.showError = true;
                 return;
             }
             this.showEditConfirm = true;
@@ -292,12 +310,19 @@ export default {
             try {
 
                 const newData = {
+                    holes: this.selectedSC_holes 
                 }
 
-                const res = await ScorecardService.editScorecard(id, newData)
+                const editres = await ScorecardService.editScorecard(id, newData)
+
+                const res = await ScorecardService.getScorecards()
+                this.scorecards = res.data
+
             } catch (err) {
                 this.error = "Scorecard could not be edited."
+                return;
             }
+            this.showEditConfirm = false
         },
         promptDeleteSC(id) {
             if (!id) {
@@ -376,6 +401,10 @@ export default {
 .upanel-bottom {
     justify-content: center;
     display: flex;
+    flex-direction: column; 
+    align-items: center;     
+    padding-top: 10px;
+    gap: 10px;  
     padding-top: 10px;
 }
 
@@ -442,6 +471,7 @@ export default {
 .scorecard-table {
     border-collapse: collapse;
     margin-top: 20px;
+    margin-bottom: 5px;
 }
 
 .scorecard-table th,
@@ -449,6 +479,11 @@ export default {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: center;
+}
+
+.spacer-row td {
+    height: 15px;
+    border: none;
 }
 
 .cell-input {
@@ -506,6 +541,17 @@ button {
 .modal-buttons button {
     padding: 8px 16px;
     cursor: pointer;
+}
+
+.error {
+    justify-content: center;
+    align-content: center;
+    align-self: center;
+    display: flex;
+    color:red;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: white;
 }
 
 </style>

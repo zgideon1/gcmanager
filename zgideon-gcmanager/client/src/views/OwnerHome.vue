@@ -8,18 +8,18 @@
                 <div class="sidebar-top">
                     <button class="expand-btn" @click="toggleSidebar">☰</button>
 
-                    <button class="button sidebarButton" @click="navigateTo('owner-dashboard')" id="homeButton">
+                    <button class="button sidebarButton" @click="navigateTo('dashboard')" id="homeButton">
                         <span class="sideBarText"> Home
                         </span>
                     </button>
                 </div>
 
                 <div class="sidebar-main">
-                    <button type='button' class="button sidebarButton" @click="navigateTo('owner-teetimes')">
+                    <button type='button' class="button sidebarButton" @click="navigateTo('teetimes')">
                         <span class="sideBarText">Tee-Times</span>
                     </button>
 
-                    <button type='button' class="button sidebarButton" @click="navigateTo('owner-tournaments')">
+                    <button type='button' class="button sidebarButton" @click="navigateTo('tournaments')">
                         <span class="sideBarText">Tournaments</span>
                     </button>
 
@@ -31,8 +31,8 @@
                         <span class="sideBarText">Inventory</span>
                     </button>
 
-                    <button type='button' class="button sidebarButton" @click="navigateTo('owner-scores')">
-                        <span class="sideBarText">View Scores</span>
+                    <button type='button' class="button sidebarButton" @click="navigateTo('scores')">
+                        <span class="sideBarText">Scores</span>
                     </button>
                 </div>
 
@@ -78,16 +78,36 @@
 
     function toggleSidebar() {
     isExpanded.value = !isExpanded.value
-    }   
-
-    function navigateTo(page) {
-        router.push({name: `${page}`})
     }
 
     function confirmLogout() {
         store.dispatch('clearUser', store.state.user)
         router.push('/')
     }
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            rolename: ''
+        }
+    },
+    methods: {
+        navigateTo(page) {
+            if(this.$store.state.user.role === 1) {
+                this.rolename = "customer"
+            }
+            else if(this.$store.state.user.role === 2) {
+                this.rolename = "employee"
+            }
+            else {
+                this.rolename = "owner"
+            }
+            this.$router.push({name: `${this.rolename}-${page}`})
+        }
+    }
+}
 </script>
 
 <style scoped>

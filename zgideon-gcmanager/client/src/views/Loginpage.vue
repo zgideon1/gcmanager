@@ -60,13 +60,7 @@ export default {
                 this.$store.dispatch('setToken', response.data.token)
                 this.$store.dispatch('setUser', response.data.user)
 
-                if(response.data.user.role === 2) {
-                    this.$router.push('/employeehome')
-                }
-                if(response.data.user.role === 3) {
-                    this.$router.push('/ownerhome')
-                }
-                else this.$router.push('/userhome')
+                this.$router.push('home')
             } catch (err) {
                 this.error = err.response?.data?.error || 'Server is not responding'
             }

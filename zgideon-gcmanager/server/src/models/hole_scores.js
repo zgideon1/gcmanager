@@ -3,13 +3,14 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         score_id: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        hole_id: {
+        score_holeid: {
             type: DataTypes.INTEGER,
             allowNull: false
         },

@@ -1,6 +1,6 @@
 <template>
   <div class="calendar-layout">
-    <div class="employee-panel">
+    <div class="employee-panel" v-if="isOwner">
       <h3>Select Employee</h3>
       <select v-model="selectedEmployeeId" id="selectMenu">
           <option disabled value="">-- Select Employee --</option>
@@ -40,6 +40,7 @@ export default {
       employees: [],
       selectedEmployeeId: null,
       showError: false,
+      isOwner: false,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: "timeGridWeek",
@@ -95,6 +96,12 @@ export default {
         this.error = "Failed to load employees"
         this.showError = true
     }
+
+    this.isOwner = this.$store.state.user.role === 3
+
+    this.calendarOptions.selectable = this.isOwner
+    this.calendarOptions.editable = this.isOwner
+    this.calendarOptions.eventResizableFromStart = this.isOwner
   },
 
   methods: {
@@ -121,6 +128,9 @@ export default {
     },
 
     async handleScheduleClick(info) { 
+      if(this.$store.state.user.role != 3) {
+        return;
+      }
       this.error = null
 
       const now = new Date()
@@ -177,6 +187,9 @@ export default {
     },
 
     async handleDeleteClick(info) {
+      if(this.$store.state.user.role != 3) {
+        return;
+      }
       this.error = null
       const now = new Date()
       const selectedDate = new Date(info.event.start)
@@ -199,6 +212,9 @@ export default {
       }
     },
     async handleEventUpdate(info) {
+      if(this.$store.state.user.role != 3) {
+        return;
+      }
       this.error = null
 
       const now = new Date()

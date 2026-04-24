@@ -131,6 +131,7 @@
                 </div>
             </div>
             <div class="upanel-bottom">
+                <div v-if="showError" v-html="error" class="error"></div>
                  <button type="button" class="panelButton" @click="addUser">
                     Add User
                 </button>
@@ -241,6 +242,7 @@
                 </div>
             </div>
             <div class="upanel-bottom">
+                <div v-if="showError" v-html="error" class="error"></div>
                 <button type="button" class="panelButton" @click="promptEdit()">
                     Edit User
                 </button>
@@ -286,6 +288,7 @@ export default {
             users: [],
             roles:[],
             error: null,
+            showError: false,
             selectedUserId: null,
             selectedRoleId: null,
             selectedScorecardId: null,
@@ -345,12 +348,16 @@ export default {
             if(this.editUserPageExpanded) {
                 this.editUserPageExpanded = false
             }
+            this.showError = false
+            this.error = null
         },
         expandEditUserPage(){
             this.editUserPageExpanded = !this.editUserPageExpanded
             if(this.addUserPageExpanded) {
                 this.addUserPageExpanded = false
             }
+            this.showError = false
+            this.error = null
         },
         expandDropdown(section) {
             this.activeDropdown = this.activeDropdown === section ? null : section;
@@ -379,6 +386,8 @@ export default {
                 this.selectedUserId = this.users.length > 0 ? this.users[0].uid : null
             } catch (err) {
                 this.error = "User could not be created"
+                this.showError = true
+                return
             }
 
             this.email = null
@@ -394,7 +403,8 @@ export default {
         promptEdit() {
             if (!this.selectedUserId) {
                 this.error = "Please select a user to edit.";
-                return;
+                this.showError = true
+                return
             }
             this.showEditConfirm = true;
         },
@@ -451,6 +461,8 @@ export default {
                 const res = await UserService.editUser(id, newData)
             } catch (err) {
                 this.error = "User could not be edited"
+                this.showError = true
+                return
             }
 
             this.email = null
@@ -466,6 +478,7 @@ export default {
         promptDeleteUser() {
             if (!this.selectedUserId) {
                 this.error = "Please select a user to delete.";
+                this.showError = true
                 return;
             }
             this.showDeleteConfirm = true;
@@ -480,6 +493,8 @@ export default {
                 this.users = res.data;  
             } catch (err) {
                 this.error = "User could not be deleted.";
+                this.showError = true
+                return
             }
         },
         cancelDelete() {
@@ -524,7 +539,7 @@ export default {
     background: white;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    min-width: 300px;
+    min-width: 400px;
 
     display: flex;
     flex-direction: column;
@@ -540,6 +555,8 @@ export default {
 .upanel-bottom {
     justify-content: center;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     padding-top: 10px;
 }
 
@@ -585,25 +602,6 @@ export default {
     font-size: 0.95rem;
     color: #2c3e50;
     word-break: break-word;
-}
-
-.role-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    width: fit-content;
-}
-
-.role-badge.employee {
-    background: #e6f4ea;
-    color: #2e7d32;
-}
-
-.role-badge.user {
-    background: #e3f2fd;
-    color: #1565c0;
 }
 
 .section {
@@ -700,6 +698,17 @@ button {
 .modal-buttons button {
     padding: 8px 16px;
     cursor: pointer;
+}
+
+.error {
+    justify-content: center;
+    align-content: center;
+    align-self: center;
+    display: flex;
+    color:red;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: white;
 }
 
 </style>

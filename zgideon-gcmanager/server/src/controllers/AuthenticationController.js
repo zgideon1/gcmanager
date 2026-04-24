@@ -63,7 +63,7 @@ module.exports = {
     async getUsers(req, res) {
         try {
             const users = await User.findAll({
-                attributes: ['uid', 'username', 'firstname', 'lastname','email', 'phoneNum', 'address', 'role', 'handicap']
+                attributes: ['uid', 'username', 'firstname', 'lastname','email', 'phoneNum', 'address', 'role', 'scorecard_id', 'handicap']
             })
 
             const userJson = users.map(u => u.toJSON())
@@ -78,7 +78,7 @@ module.exports = {
     async getUser(req, res) {
         try {
             const user = await User.findOne({
-                where: {uid: req.params.uid}, attributes: ['uid', 'username', 'firstname', 'lastname','email', 'phoneNum', 'address', 'role', 'handicap']
+                where: {uid: req.params.uid}, attributes: ['uid', 'username', 'firstname', 'lastname','email', 'phoneNum', 'address', 'role', 'scorecard_id', 'handicap']
             })
 
             if(!user) {
