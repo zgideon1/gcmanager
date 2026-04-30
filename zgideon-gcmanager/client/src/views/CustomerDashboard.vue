@@ -1,16 +1,16 @@
 <template>
     <div class="menu">
         <div id="menuBackground">
-            <button type='button' class="menuButton" id='menuScoresButton' @click="navigateTo('scores')">
-                <span class="menuButtonText">Score Recording<br> & History</span>
-            </button>
-
-            <button type='button' class="menuButton" id="menuTournamentsButton" @click="navigateTo('tournaments')">
+            <!-- <button type='button' class="menuButton" id="menuTournamentsButton" @click="navigateTo('tournaments')">
                 <span class="menuButtonText">Upcoming<br> Tournaments</span>
-            </button>
+            </button> -->
 
             <button type='button' class="menuButton tee" id="menuTeeTimesButton" @click="navigateTo('teetimes')">
                 <span class="menuButtonText">Schedule a <br>Tee Time</span>
+            </button>
+
+            <button type='button' class="menuButton" id='menuScoresButton' @click="navigateTo('scores')">
+                <span class="menuButtonText">Score Recording<br> & History</span>
             </button>
 
             <button type='button' class="menuButton" id="menuLogoutButton" @click="showLogoutConfirm = true">
@@ -79,7 +79,7 @@ export default {
 <style scoped>
 .container {
     display: flex;
-    height: 100vh;
+    height: 100%;
     width: 100%;
 }
 
@@ -173,9 +173,10 @@ export default {
 
 #menuLogoutButton {
     background-image: url('@/imgs/Logout_whiteblue.png');
-    background-size: 40%;
+    background-size: 23%;
     background-repeat: no-repeat;
     height: 100%;
+    grid-column: 1 / -1;
 }
 
 .menuButton::after {

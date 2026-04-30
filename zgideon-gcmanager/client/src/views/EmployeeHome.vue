@@ -8,7 +8,7 @@
                 <div class="sidebar-top">
                     <button class="expand-btn" @click="toggleSidebar">☰</button>
 
-                    <button class="button sidebarButton" @click="navigateTo('employee-dashboard')" id="homeButton">
+                    <button class="button sidebarButton" @click="navigateTo('dashboard')" id="homeButton">
                         <span class="sideBarText"> Home
                         </span>
                     </button>

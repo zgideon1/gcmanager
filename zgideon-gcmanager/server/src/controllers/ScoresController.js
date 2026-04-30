@@ -24,7 +24,6 @@ module.exports = {
             return res.status(200).send(result)
 
         } catch (err) {
-            console.log(err)
             return res.status(400).send({
                 error: 'Score could not be created.'
             })
@@ -36,6 +35,25 @@ module.exports = {
                 where: {
                     score_uid: req.user.id
                 }
+            })
+
+            return res.send(scores)
+        } catch(err) {
+            res.status(400).send({
+                error: 'Your scores could not be loaded.'
+            })
+        }
+    },
+    async viewScore(req, res) {
+        try {
+            const scores = await Score.findAll( {
+                where: {
+                    score_uid: req.params.id
+                },
+                include: [{
+                    model: HoleScore,
+                    attributes: ['score_holeid', 'strokes']
+                }]
             })
 
             return res.send(scores)

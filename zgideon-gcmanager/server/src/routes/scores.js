@@ -9,6 +9,11 @@ router.get(
   ScoresController.viewScores
 );
 
+router.get(
+  "/scores/:id",
+  ScoresController.viewScore
+)
+
 router.post(
   "/scores", 
   ScoresController.postScore

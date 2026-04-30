@@ -108,7 +108,6 @@ module.exports = {
             })
 
         } catch (err) {
-            console.error(err)
             res.status(400).send({
             error: 'Schedule could not be deleted'
             })

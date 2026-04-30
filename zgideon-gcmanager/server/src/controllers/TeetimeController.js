@@ -9,6 +9,7 @@ module.exports = {
 
             return res.send(ttJson)
         } catch(err) {
+            console.log(err)
             res.status(400).send({
                 error: 'Tee time could not be posted.'
             })

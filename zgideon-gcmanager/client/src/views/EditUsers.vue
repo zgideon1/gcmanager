@@ -203,8 +203,16 @@
 
                     <div v-if="activeDropdown === 'role'" class="section-body">
                         <div class="formRow">
-                            <label>Is Employee?:</label>
+                            <label>Is Employee?</label>
                             <select v-model="isEmployee">
+                                <option :value="false" >No</option>
+                                <option :value="true">Yes</option>
+                            </select>
+                        </div>
+
+                        <div v-if="expandOwner !== isEmployee" class="formRow">
+                            <label>Is Owner?</label>
+                            <select v-model="isOwner">
                                 <option :value="false">No</option>
                                 <option :value="true">Yes</option>
                             </select>
@@ -227,14 +235,14 @@
 
                         <div class="formRow">
                             <label>Using Scorecard: </label>
-                            <select v-model="selectedScorecardId">
+                            <select v-model.number="selectedSCId">
                                 <option disabled value="">-- Select Scorecard --</option>
                                 <option
                                     v-for="sc in scorecards"
                                     :key="sc.id"
-                                    :value="sc.name_id"
+                                    :value="sc.id"
                                 >
-                                    {{ sc.id }} {{ sc.name }}
+                                    {{ sc.name }}
                                 </option>
                             </select>
                         </div>
@@ -264,8 +272,8 @@
 
         <div v-if="showEditConfirm" class="modal-overlay">
             <div class="modal">
-                <p>Edited Information:
-                    <strong>id# {{selectedUserId}}</strong>?
+                <p>Are you sure you want to commit these changes to
+                    <strong>{{selectedUserId}} {{ selectedUser.firstname }} {{ selectedUser.lastname }}</strong>?
                 </p>
 
                 <div class="modal-buttons">
@@ -287,11 +295,12 @@ export default {
         return {
             users: [],
             roles:[],
+            scorecards:[],
             error: null,
             showError: false,
             selectedUserId: null,
             selectedRoleId: null,
-            selectedScorecardId: null,
+            selectedSCId: null,
             addUserPageExpanded: false,
             editUserPageExpanded: false,
             showEditConfirm: false,
@@ -304,6 +313,8 @@ export default {
             phoneNum: null,
             handicap: null,
             isEmployee: false,
+            isOwner: false,
+            expandOwner: false,
             activeDropdown: '',
             selectedUser: null,
         }
@@ -340,6 +351,18 @@ export default {
             }
         } catch(err) {
             this.error = 'Failed to load roles'
+        }
+
+        // Retrieve Scorecards
+        try {
+            const res3 = await ScorecardService.getScorecards()
+            this.scorecards = res3.data
+
+            if (this.scorecards.length > 0) {
+                this.selectedSCId = this.scorecards[0].id
+            }
+        } catch (err) {
+            this.error = "Failed to load scorecards"
         }
     },
     methods: {
@@ -414,8 +437,13 @@ export default {
         async editUser(id) {
             try {
                 let role = 1
+
                 if(this.isEmployee) {
                     role = 2
+                }
+
+                if(this.isOwner) {
+                    role = 3
                 }
 
                 if(this.username == null) {
@@ -455,7 +483,7 @@ export default {
                     address: this.address,
                     role: role,
                     handicap: this.handicap,
-                    scorecard_id: this.selectedScorecardId
+                    scorecard_id: this.selectedSCId
                 }
 
                 const res = await UserService.editUser(id, newData)
@@ -652,7 +680,7 @@ select {
     padding: 10px;
     border-radius: 8px;
     border: none;
-    font-size: 0.95rem;
+    font-size: large;
     outline: none;
     border: 2px solid blue;
 }

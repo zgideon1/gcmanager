@@ -17,6 +17,8 @@ import EditUsers from '@/views/EditUsers.vue'
 import PostScores from '@/views/PostScores.vue'
 import ViewScores from '@/views/ViewScores.vue'
 import Scorecards from '@/views/Scorecards.vue'
+import Tournaments from '@/views/Tournaments.vue'
+import EditTournaments from '@/views/EditTournaments.vue'
 import store from '@/store/store'
 
 const routes = [
@@ -108,12 +110,12 @@ const routes = [
 
   {
     path: '/owner',
-    component: () => import('@/views/OwnerHome.vue'),
+    component: OwnerHome,
     children: [
       {
         path: '',
         name: 'owner-dashboard',
-        component: () => import('@/views/OwnerDashboard.vue')
+        component: OwnerDashboard
       },
 
       {
@@ -176,6 +178,24 @@ const routes = [
         component: EmployeeSchedules,
         meta: {role: 3}
         },
+        {
+          path: 'tournaments',
+          name: 'owner-tournaments',
+          component: Tournaments,
+          meta: {role: 3}
+        },
+        {
+          path: 'tournaments/edit',
+          name: 'owner-tournaments-edit',
+          component: EditTournaments,
+          meta: {role: 3}
+        },
+        {
+          path: 'tournaments/signups',
+          name: 'owner-tournaments-signups',
+          component: EditTournaments,
+          meta: {role: 3}
+        }
     ]
   }
 ]

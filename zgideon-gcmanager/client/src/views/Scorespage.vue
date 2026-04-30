@@ -13,7 +13,7 @@
                     <span class="menuButtonText">Create a <br>Scorecard</span>
                 </button>
 
-                <button type='button' class="menuButton" id="menuLogoutButton" :class="{ fullWidth: !isOwner }" @click="showLogoutConfirm = true">
+                <button type='button' class="menuButton" :style="logoutStyle" id="menuLogoutButton" :class="{ fullWidth: !isOwner }" @click="showLogoutConfirm = true">
                     <span class="menuButtonText">Logout</span>
                 </button>
         </div>
@@ -79,7 +79,13 @@ export default{
 
             console.log(this.$route)
         }
-    }
+    },
+    computed: {
+        logoutStyle() {
+            return {
+            backgroundSize: this.isOwner ? '35%' : '23%'
+            }
+        }}
 }
 </script>
 
@@ -188,7 +194,6 @@ export default{
     width: 50%;
     height: 50%;
     background-image: url('@/imgs/Logout_whiteblue.png');
-    background-size: 35%;
     background-repeat: no-repeat;
 }
 

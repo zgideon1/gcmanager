@@ -3,19 +3,29 @@ module.exports = (sequelize, DataTypes) => {
         tournid: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
-        userid: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        startTime: {
+        contactemail: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        endTime: {
-            type: DataTypes.STRING,
+        gametype: {
+            type: DataTypes.STRING
+        },
+        starttime: {
+            type: DataTypes.DATE,
             allowNull: false
+        },
+        endtime: {
+            type: DataTypes.DATE,
+        },
+        estamtplayers: {
+            type: DataTypes.STRING
         }
     }, {
         timestamps:false

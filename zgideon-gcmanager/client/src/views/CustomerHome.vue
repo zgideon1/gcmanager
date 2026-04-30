@@ -8,7 +8,7 @@
             <div class="sidebar-top">
                 <button class="expand-btn" @click="toggleSidebar">☰</button>
 
-                <button class="button sidebarButton" @click="navigateTo('')" id="homeButton">
+                <button class="button sidebarButton" @click="navigateTo('dashboard')" id="homeButton">
                     <span class="sideBarText"> Home
                     </span>
                 </button>
@@ -19,9 +19,9 @@
                     <span class="sideBarText">Tee-Times</span>
                 </button>
 
-                <button type='button' class="button sidebarButton" id="tournamentsButton" @click="navigateTo('tournaments')">
+                <!-- <button type='button' class="button sidebarButton" id="tournamentsButton" @click="navigateTo('tournaments')">
                     <span class="sideBarText">Tournaments</span>
-                </button>
+                </button> -->
 
                 <button type='button' class="button sidebarButton" @click="navigateTo('scores')">
                     <span class="sideBarText">Scores</span>

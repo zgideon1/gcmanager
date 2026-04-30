@@ -1,7 +1,7 @@
-const {tourns:Tournament} = require('../models')
+const {tournaments:Tournament} = require('../models')
 
 module.exports = {
-    async create (req, res) {
+    async createTournament(req, res) {
             try {
                 const tournament = await Tournament.create(req.body)
     
@@ -14,18 +14,45 @@ module.exports = {
                 })
             }
         },
-    async getAll(req, res) {
+    async getTournaments(req, res) {
         try {
-            const tournaments = await Tournaments.create(req.body)
+            const tournaments = await Tournament.findAll()
 
-            const tournJson = tournaments.toJSON()
+            const tournJson = tournaments.map(t => t.toJSON())
 
             return res.send(tournJson)
         } catch (err) {
-            return null;
+            console.log(err)
+            return res.status(400).send({
+                error: 'Tournaments could not be loaded.'
+            })
         }
     },
-    async get(req, res) {
+    async editTournament(req, res) {
+        try {
+            const { id } = req.params
+
+            const tournament = await Tournament.findByPk(id)
+
+            if(!tournament) {
+                return res.status(404).send({
+                    error: 'Tournament not found'
+                })
+            }
+
+            await tournament.update({
+                starttime: req.body.starttime,
+                endtime: req.body.endtime
+            })
+
+            return res.send(tournament.toJSON())
+        } catch (err) {
+            res.status(400).send({
+                error: 'Tournament could not be updated'
+            })
+        }
+    },
+    async getTournament(req, res) {
         try {
             const tournament = await Tournaments.findAll(t => t.id == req.body.id)
 
@@ -36,11 +63,28 @@ module.exports = {
             return null;
         }
     },
-    async delete(req, res) {
+    async deleteTournament(req, res) {
         try {
-            return null;
-        } catch(err) {
-            return null;
+            const { id } = req.params
+
+            const tournament = await Tournament.findByPk(id)
+
+            if(!tournament) {
+                return res.status(404).send({
+                    error: 'Tournament not found'
+                })
+            }
+
+            await tournament.destroy()
+
+            return res.send({
+            message: 'Tournament deleted successfully'
+            })
+
+        } catch (err) {
+            res.status(400).send({
+            error: 'Tournament could not be deleted'
+            })
         }
     }
 }

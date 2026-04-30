@@ -77,7 +77,7 @@ export default {
   },
 
   async mounted() {
-    this.calendarOptions.events = this.fetchEvents
+    this.fetchEvents()
     this.calendarOptions.dateClick = this.handleScheduleClick
     this.calendarOptions.eventClick = this.handleDeleteClick
 
@@ -110,7 +110,7 @@ export default {
       try {
         const res = await EmployeeScheduleService.getSchedules()
 
-        const events = res.data.map(schedule => ({
+        this.calendarOptions.events = res.data.map(schedule => ({
             id: schedule.sid,
             title: schedule.firstname,
             start: schedule.starttime,

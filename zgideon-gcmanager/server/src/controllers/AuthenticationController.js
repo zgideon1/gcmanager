@@ -98,7 +98,7 @@ module.exports = {
     async editUser(req, res) {
         try {
             const { uid } = req.params
-            const { email, username, firstname, lastname, address, phoneNum, role, handicap} = req.body;
+            const { email, username, firstname, lastname, address, phoneNum, role, handicap, scorecard_id} = req.body;
 
             const user = await User.findByPk(uid)
 
@@ -118,7 +118,8 @@ module.exports = {
                 address,
                 phoneNum,
                 role: Number(role),
-                handicap: Number(handicap)
+                handicap: Number(handicap),
+                scorecard_id
             });
 
             res.send({ message: 'User updated successfully' })

@@ -3,19 +3,23 @@ const router = express.Router();
 const TournamentsController = require('../controllers/TournamentsController')
 
 router.get("/tournaments", 
-  TournamentsController.getAll
+  TournamentsController.getTournaments
 );
 
 router.get("/tournaments/:id",
-  TournamentsController.get
+  TournamentsController.getTournament
+)
+
+router.put("/tournaments/:id",
+  TournamentsController.editTournament
 )
 
 router.post("/tournaments",
-  TournamentsController.create
+  TournamentsController.createTournament
 );
 
 router.delete("/tournaments/:id",
-  TournamentsController.delete
+  TournamentsController.deleteTournament
 )
 
 module.exports = router;

@@ -4,8 +4,11 @@ export default {
     async postScore(score) {
         return Api.post('/scores', score)
     },
-    async getScores(credentials) {
-        return Api.get('/scores', credentials)
+    async getScores() {
+        return Api.get('/scores', uid)
+    },
+    async getScore(uid) {
+        return Api.get(`/scores/${uid}`)
     },
     async deleteScore(id) {
         return Api.delete(`/scores/${id}`)

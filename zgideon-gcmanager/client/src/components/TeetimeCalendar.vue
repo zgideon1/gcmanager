@@ -7,6 +7,7 @@
 
 <script>
 import TeetimeService from "@/services/TeetimeService"
+import TournamentService from "@/services/TournamentService"
 
 import FullCalendar from "@fullcalendar/vue3"
 import dayGridPlugin from "@fullcalendar/daygrid"
@@ -38,7 +39,6 @@ export default {
 
         height: '100%',
 
-        selectable: true,
 
         headerToolbar: {
             left: "prev,next today",
@@ -48,35 +48,50 @@ export default {
 
         events: [],
 
-        dateClick: null,
-        eventClick: null
+        selectable: true,
+
+        eventClick: null,
+        dateClick: null
       }
     }
   },
 
   mounted() {
-    this.calendarOptions.events = this.fetchEvents
-    this.calendarOptions.dateClick = this.handleDateClick
+    this.fetchEvents()
     this.calendarOptions.eventClick = this.handleEventClick
+    this.calendarOptions.dateClick = this.handleDateClick
   },
 
   methods: {
 
-    async fetchEvents(fetchInfo, successCallback, failureCallback) {
+    async fetchEvents() {
       try {
-        const res = await TeetimeService.getAvailableTimes()
+        // Retrieve All Booked Tee Times
+        const res1 = await TeetimeService.getAvailableTimes()
 
-        const events = res.data.map(tt => ({
+        const ttEvents = res1.data.map(tt => ({
             id: tt.teeid,
             title: `${tt.user.firstname} (${tt.numofplayers})`,
             start: tt.timeval,
-            end: new Date(new Date(tt.timeval).getTime() + 8 * 60000)
+            end: new Date(new Date(tt.timeval).getTime() + 8 * 60000),
+            color: "#0000ff"
         }))
 
-        successCallback(events)
+        // Retrieve All Booked Tournaments
+        const res2 = await TournamentService.getTournaments()
 
+        const tournEvents = res2.data.map(t => ({
+            id: `tourn-${t.tournid}`,
+            title: `TOURNAMENT: ${t.name}, ${t.estamtplayers} players`,
+            start: t.starttime,
+            end: t.endtime,
+            color: "#ef4444",
+        }))
+
+        this.calendarOptions.events = [ ...ttEvents, ...tournEvents ]
       } catch (err) {
-        failureCallback(err)
+        this.error = 'Events could not be loaded'
+        this.showError = true
       }
     },
 
@@ -84,6 +99,29 @@ export default {
       this.error = null
       const now = new Date()
       const selectedDate = new Date(info.dateStr)
+      const calendarApi = this.$refs.calendar.getApi()
+      const events = calendarApi.getEvents()
+
+      const BUFFER_MS = 8 * 60 * 1000
+      const SLOT_MS = 8 * 60 * 1000
+
+      const selectedStart = selectedDate.getTime()
+      const selectedEnd = selectedStart + SLOT_MS
+
+      const isBlocked = events.some(e => {
+        if (!e.id.startsWith("tourn-")) return false
+
+        const bufferStart = new Date(e.start).getTime() - BUFFER_MS
+        const bufferEnd = new Date(e.end).getTime() + BUFFER_MS
+
+        return selectedStart < bufferEnd && selectedEnd > bufferStart
+      })
+
+      if (isBlocked) {
+        this.error = "Cannot book during a tournament."
+        this.showError = true
+        return
+      }
 
       if (selectedDate < now) {
         this.error = "Cannot book a tee time in the past."
@@ -150,6 +188,10 @@ export default {
       if (selectedDate < now) {
         this.error = "Cannot delete a tee time in the past."
         this.showError = true
+        return
+      }
+
+      if(info.event.id.startsWith("tourn-"))  {
         return
       }
 

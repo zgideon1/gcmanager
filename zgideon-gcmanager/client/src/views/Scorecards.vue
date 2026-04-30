@@ -29,7 +29,7 @@
             </div>
         </div>
         
-        <div class="upanel" v-if="addSCPageExpanded"> 
+        <div class="scpanel" v-if="addSCPageExpanded"> 
             <div class="upanel-top">
                 <h2>Add Scorecard</h2>
                 <div class="formRow">
@@ -53,7 +53,7 @@
 
                 <table class="scorecard-table" id='scorecardheader' v-if="holes.length">
                     <tr>
-                        <th id="scorecard-title" colspan='10'>{{ scname }}</th>
+                        <th id="scorecard-title" colspan='11'>{{ scname }}</th>
                     </tr>
 
                     <template v-for="(group, index) in groupedAddHoles" :key="index">
@@ -62,6 +62,7 @@
                             <th colspan="10">
                                 {{ index === 0 ? 'Front 9' : index === 1 ? 'Back 9' : 'Extra ' + (index + 1) }}
                             </th>
+                            <th>Totals</th>
                         </tr>
 
                         <tr>
@@ -69,6 +70,7 @@
                             <td v-for="hole in group" :key="'h' + hole.holenum">
                                 {{ hole.holenum }}
                             </td>
+                            <td></td>
                         </tr>
 
                         <tr>
@@ -76,6 +78,7 @@
                             <td v-for="hole in group" :key="'p' + hole.holenum">
                                 <input type="number" v-model="hole.par" class="cell-input"/>
                             </td>
+                            <td class="totals">{{ getTotalPar(index, group) }}</td>
                         </tr>
 
                         <tr>
@@ -83,6 +86,7 @@
                             <td v-for="hole in group" :key="'y' + hole.holenum">
                                 <input type="number" v-model="hole.yardage" class="cell-input"/>
                             </td>
+                            <td class="totals">{{ getTotalYardage(index, group) }}</td>
                         </tr>
 
                         <tr class="spacer-row">
@@ -99,13 +103,20 @@
             </div>
         </div>
 
-        <div class="upanel" v-if="editSCPageExpanded">
+        <div class="scpanel" v-if="editSCPageExpanded">
             <div class="upanel-top">
                 <h2>Current Scorecard</h2>
 
+                <label>New name: </label>
+                <input 
+                    type="text" 
+                    name="scname" 
+                    id="scNameInput" 
+                    v-model="newscname"/>
+
                 <table class="scorecard-table" id='scorecardheader' v-if="selectedSC_holes.length">
                     <tr>
-                        <th id="scorecard-title" colspan='10'>{{ selectedSC.name }}</th>
+                        <th id="scorecard-title" colspan='11'>{{ selectedSC.name }}</th>
                     </tr>
 
                     <template v-for="(group, index) in groupedEditHoles" :key="index">
@@ -114,6 +125,7 @@
                             <th colspan="10">
                                 {{ index === 0 ? 'Front 9' : index === 1 ? 'Back 9' : 'Extra ' + (index + 1) }}
                             </th>
+                            <th>Totals</th>
                         </tr>
 
                         <tr>
@@ -121,6 +133,7 @@
                             <td v-for="hole in group" :key="'h' + hole.holenum">
                                 {{ hole.holenum }}
                             </td>
+                            <td></td>
                         </tr>
 
                         <tr>
@@ -128,6 +141,7 @@
                             <td v-for="hole in group" :key="'p' + hole.holenum">
                                 <input type="number" v-model="hole.par" class="cell-input"/>
                             </td>
+                            <td class="totals">{{ getTotalPar(index, group) }}</td>
                         </tr>
 
                         <tr>
@@ -135,6 +149,7 @@
                             <td v-for="hole in group" :key="'y' + hole.holenum">
                                 <input type="number" v-model="hole.yardage" class="cell-input"/>
                             </td>
+                            <td class="totals">{{ getTotalYardage(index, group) }}</td>
                         </tr>
 
                         <tr class="spacer-row">
@@ -195,6 +210,7 @@ export default {
             selectedSCId: null,
             selectedSC_holes: [],
             scname: null,
+            newscname: null,
             scorecards:[],
             holes: [],
             holeCount: '',
@@ -220,12 +236,15 @@ export default {
             const sc = this.scorecards.find(s => s.id === newId)
 
             if (sc) {
-            this.selectedSC_holes = sc.holes
-                .slice()
-                .sort((a, b) => a.holenum - b.holenum)
-                .map(h => ({ ...h }))
+                this.selectedSC_holes = sc.holes
+                    .slice()
+                    .sort((a, b) => a.holenum - b.holenum)
+                    .map(h => ({ ...h }))
+
+                this.newscname = ''
             } else {
-            this.selectedSC_holes = []
+                this.selectedSC_holes = []
+                this.newscname = ''
             }
         },
     },
@@ -308,8 +327,13 @@ export default {
         },
         async editSC(id) {
             try {
+                let newname = this.selectedSC.name
+                if (this.newscname?.trim()) {
+                    newname = this.newscname.trim()
+                }
 
                 const newData = {
+                    name: newname,
                     holes: this.selectedSC_holes 
                 }
 
@@ -345,6 +369,16 @@ export default {
         cancelDelete() {
             this.showDeleteConfirm = false;
         },
+        getTotalYardage(groupIndex, group) {
+            return group.reduce((sum, hole) => {
+                return sum + Number(hole.yardage || 0)
+            }, 0)
+        },
+        getTotalPar(groupIndex, group) {
+            return group.reduce((sum, hole) => {
+                return sum + Number(hole.par || 0)
+            }, 0)
+        }
     }
 }
 </script>
@@ -408,34 +442,18 @@ export default {
     padding-top: 10px;
 }
 
-.user-info {
-    background: #ffffff;
+.scpanel{
+    margin-left: 20px;
+    padding: 30px;
+    background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: 0.2s ease;
-    overflow-y: auto;
-}
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    min-width: 150px;
 
-.user-info:hover {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
-.info-title {
-    margin-bottom: 16px;
-}
-
-.infoGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px 20px;
-}
-
-.infoRow {
     display: flex;
     flex-direction: column;
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: #f8f9fb;
+    height: 90%;
+    width: 70%;
 }
 
 .label {
@@ -455,6 +473,9 @@ export default {
 #scNameInput {
     height: 30px;
     width: 50%;
+    border: 3px solid blue;
+    border-radius: 12px;
+    font-size: large;
 }
 
 #holeCount {
@@ -466,6 +487,14 @@ export default {
     flex-direction: column;
     margin-bottom: 15px;
     gap: 5px;
+}
+
+#scorecard-title {
+    background: blue;
+    border: 2px solid white;
+    border-radius: 12px;
+    color: white;
+    font-size: larger;
 }
 
 .scorecard-table {
@@ -486,16 +515,21 @@ export default {
     border: none;
 }
 
+.totals {
+    color: blue;
+    font-size: large
+}
+
 .cell-input {
     width: 50px;
     text-align: center;
 }
 
 select {
-    padding: 10px;
+    padding: 15px;
     border-radius: 8px;
     border: none;
-    font-size: 0.95rem;
+    font-size: larger;
     outline: none;
     border: 2px solid blue;
 }
