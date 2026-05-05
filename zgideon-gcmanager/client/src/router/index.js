@@ -255,9 +255,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const user = store.state.user
 
-  if (!user && to.path !== '/') return next('/')
+  if (!user && to.path !== '/' && to.path !== '/register') return next('/')
 
-  if (to.meta.role && user.role !== to.meta.role) {
+  if (to.meta.role && user && user.role !== to.meta.role) {
     return next(`/${user.role === 1 ? 'customer' : user.role === 2 ? 'employee' : 'owner'}`)
   }
 

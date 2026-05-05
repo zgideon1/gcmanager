@@ -102,17 +102,17 @@ export default {
       const calendarApi = this.$refs.calendar.getApi()
       const events = calendarApi.getEvents()
 
-      const BUFFER_MS = 8 * 60 * 1000
-      const SLOT_MS = 8 * 60 * 1000
+      const buffer = 8 * 60 * 1000
+      const slot = 8 * 60 * 1000
 
       const selectedStart = selectedDate.getTime()
-      const selectedEnd = selectedStart + SLOT_MS
+      const selectedEnd = selectedStart + slot
 
       const isBlocked = events.some(e => {
         if (!e.id.startsWith("tourn-")) return false
 
-        const bufferStart = new Date(e.start).getTime() - BUFFER_MS
-        const bufferEnd = new Date(e.end).getTime() + BUFFER_MS
+        const bufferStart = new Date(e.start).getTime() - buffer
+        const bufferEnd = new Date(e.end).getTime() + slot
 
         return selectedStart < bufferEnd && selectedEnd > bufferStart
       })

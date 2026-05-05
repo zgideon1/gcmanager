@@ -91,7 +91,7 @@ export default {
             })
                 this.$store.dispatch('setToken', response.data.token)
                 this.$store.dispatch('setUser', response.data.user)
-                this.$router.push('/userhome')
+                this.$router.push('home')
             } catch (err) {
                 console.log(err)
                 this.error = err.response?.data?.error || 'Internal Server Error'
